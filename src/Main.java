@@ -1,5 +1,11 @@
 public class Main {
+
+    SystemManager manager = new SystemManager();
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        new Main().run();
+    }
+
+    public void run() {
+        manager.runProgram();
     }
 }
