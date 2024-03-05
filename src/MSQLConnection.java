@@ -7,8 +7,8 @@ import java.util.Date;
 
 public class MSQLConnection {
     private String database = "jdbc:mysql://localhost:3306/kailua_rental";
-    private String username = "nanna";
-    private String password = "Fandoms33"; //change so that it fits your own
+    private String username = "";
+    private String password = ""; //change so that it fits your own
     private Connection connection = null;
 
     public  MSQLConnection() {
