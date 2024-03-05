@@ -1,11 +1,14 @@
+import com.mysql.cj.protocol.Resultset;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MSQLConnection {
     private String database = "jdbc:mysql://localhost:3306/kailua_rental";
-    private String username = "";
-    private String password = ""; //change so that it fits your own
+    private String username = "nanna";
+    private String password = "Fandoms33"; //change so that it fits your own
     private Connection connection = null;
 
     public  MSQLConnection() {
@@ -33,6 +36,43 @@ public class MSQLConnection {
         connection = null;
     }
 
+
+    public Contract getContract(int contractID) {
+        Contract contract = null;
+        try {
+            String query =
+                    " SELECT contract_id ,fullname, address, " +
+                            "city, c.license_id ,start_date ," +
+                            " end_date , c.plate_number ," +
+                            " max_km , contract_mileage \n" +
+                    "FROM contract c JOIN\n" +
+                    "renter r ON  c.license_id = r.license_id\n" +
+                    "WHERE contract_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, contractID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                int licenseID = rs.getInt("c.license_id");
+                String renterName = rs.getString("fullname");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                LocalDate startDate = rs.getDate("start_date").toLocalDate();
+                LocalDate endDate = rs.getDate("end_date").toLocalDate();
+                int maxKm = rs.getInt("max_km");
+                double mileage = rs.getDouble("contract_mileage");
+                String numberPlate = rs.getString("c.plate_number");
+                contract  = new Contract(contractID,licenseID,renterName,address,city,startDate,endDate,maxKm,mileage,numberPlate);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return contract;
+    }
+
+
+
     // this is just to test. delete and replace with proper method
     // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
     public ArrayList<Car> getAllCars() {
@@ -55,5 +95,7 @@ public class MSQLConnection {
         }
         return cars;
     }
+
+
 
 }

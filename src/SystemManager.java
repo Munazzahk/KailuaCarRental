@@ -9,7 +9,7 @@ public class SystemManager {
     MenuBuilder menuBuilder = new MenuBuilder();
 
     public void runProgram() {
-        printCars(mysqlConnection.getAllCars());
+        System.out.println(mysqlConnection.getContract(1));
        // while (systemRunning) {
           //  runMainMenu();
         //}
