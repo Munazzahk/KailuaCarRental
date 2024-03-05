@@ -1,14 +1,16 @@
 import com.mysql.cj.MysqlConnection;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class SystemManager {
-    MSQLConnection mysqlConnection= new  MSQLConnection();
+    MSQLConnection mysqlConnection;
     boolean systemRunning = true;
     MenuBuilder menuBuilder = new MenuBuilder();
 
     public void runProgram() {
+        logon();
         System.out.println(mysqlConnection.getContract(1));
        // while (systemRunning) {
           //  runMainMenu();
@@ -24,6 +26,14 @@ public class SystemManager {
         }
 
 
+    }
+    public void logon(){
+        Scanner in = new Scanner(System.in);
+        System.out.print("Please enter your username: ");
+        String username = in.nextLine();
+        System.out.print("\nPlease enter your password: ");
+        String password = in.nextLine();
+        mysqlConnection = new  MSQLConnection(username,password);
     }
 
     // never print using toString, this is just for test
