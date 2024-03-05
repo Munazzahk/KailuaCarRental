@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.MissingFormatArgumentException;
 
 public class Contract {
     private int contractId;
@@ -28,6 +29,9 @@ public class Contract {
         this. numberPlate = numberPlate;
     }
 
+    public double getMileage(){
+        return mileage;
+    }
     @Override
     public String toString() {
         return "Contract{" +

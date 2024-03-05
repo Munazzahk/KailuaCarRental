@@ -10,6 +10,9 @@ public class SystemManager {
 
     public void runProgram() {
         System.out.println(mysqlConnection.getContract(1));
+        mysqlConnection.updateContract(1,50);
+        System.out.println(mysqlConnection.getContract(1));
+        mysqlConnection.updateContract(1,20);
        // while (systemRunning) {
           //  runMainMenu();
         //}
