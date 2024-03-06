@@ -4,7 +4,7 @@ public class MenuBuilder {
     public Menu buildMainMenu() {
         Menu mainMenu = new Menu();
         mainMenu.setMenuTitle(" Which menu would you like to access?");
-        mainMenu.setMenuItems("Cashier", "Manager ", "Coach", "Quit");
+        mainMenu.setMenuItems("");
         mainMenu.printMenu();
         return mainMenu;
     }
