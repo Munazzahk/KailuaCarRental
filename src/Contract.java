@@ -29,6 +29,42 @@ public class Contract {
         this. numberPlate = numberPlate;
     }
 
+    public int getContractId() {
+        return contractId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getRenterName() {
+        return renterName;
+    }
+
+    public int getLicenseID() {
+        return licenseID;
+    }
+
+    public int getMaxKm() {
+        return maxKm;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getNumberPlate() {
+        return numberPlate;
+    }
+
     public double getMileage(){
         return mileage;
     }
