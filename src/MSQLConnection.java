@@ -17,6 +17,8 @@ public class MSQLConnection {
     private static final String ADMIN_USERNAME = "kailua";
     private static final String ADMIN_PASSWORD = "123";
 
+    private Connection connection = null;
+
     public  MSQLConnection() {
 /*        this.username = username;
         this.password = password;*/
@@ -44,6 +46,7 @@ public class MSQLConnection {
             boolean passwordMatches = checkPassword(conn1, username, password);
             if (passwordMatches) {
                 System.out.println("Password matches for user: " + username);
+
             } else {
                 System.out.println("Password does not match for user: " + username);
             }
@@ -74,6 +77,15 @@ public class MSQLConnection {
 
             if (passwordMatches) {
                 System.out.println("Password matches for user: " + username);
+                if (connection != null)
+                    return;
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    connection = DriverManager.getConnection(DB_URL_rental, username, password);
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+
             } else {
                 System.out.println("Password does not match for user: " + username);
             }
@@ -99,10 +111,9 @@ public class MSQLConnection {
 
 
     private static boolean checkPassword(Connection connection, String username, String password) throws SQLException {
-        String sql = "SELECT employee_username FROM employees WHERE employee_username = ? AND employee_password = ?";
+        String sql = "SELECT employee_username FROM employees WHERE employee_username = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
-            statement.setString(2, password);
             try (ResultSet resultSet = statement.executeQuery()) {
                 return resultSet.next(); // If the result set has a next row, the username and password match
             }
@@ -119,7 +130,7 @@ public class MSQLConnection {
     }*/
 
 
- /*   public Contract getContract(int contractID) {
+   public Contract getContract(int contractID) {
         Contract contract = null;
         try {
             String query =
@@ -151,7 +162,7 @@ public class MSQLConnection {
             System.out.println(e.getMessage());
         }
         return contract;
-    }*/
+    }
 
 
 

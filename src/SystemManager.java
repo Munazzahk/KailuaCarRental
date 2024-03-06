@@ -11,7 +11,7 @@ public class SystemManager {
 
     public void runProgram() {
         // logon();
-        //System.out.println(mysqlConnection.getContract(1));
+        System.out.println(mysqlConnection.getContract(1));
        // while (systemRunning) {
           //  runMainMenu();
         //}
