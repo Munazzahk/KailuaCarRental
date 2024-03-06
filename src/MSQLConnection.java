@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class MSQLConnection {
+
 /*    private String database = "jdbc:mysql : //localhost:3306/kailua_rental"; */
 /*    private String username;*/
 /*    private String password; //change so that it fits your own */
@@ -164,7 +165,22 @@ public class MSQLConnection {
         return contract;
     }
 
+    public void updateContract(int contractID, int km) {
+        Contract contract = getContract(contractID);
+        if (km > contract.getMileage())
+            try {
+                String query = "UPDATE contract SET contract_mileage = ? WHERE contract_id = ?";
+                PreparedStatement stm = connection.prepareStatement(query);
+                stm.setInt(1, km);
+                stm.setInt(2, contractID);
+                stm.executeUpdate();
 
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+    } else System.out.println("The entered mileage is less then the current mileage");
+
+    }
 
     // this is just to test. delete and replace with proper method
     // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
