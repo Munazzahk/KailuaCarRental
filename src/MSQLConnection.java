@@ -24,15 +24,16 @@ public class MSQLConnection {
     }
 
 
-    private void createConnection() {
-/*        if (connection != null)
+/*    private void createConnection() {
+        System.out.println("Connecting to database: " + DB_URL_rental);
+*//*        if (connection != null)
             return;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(database, username, password);
         } catch (Exception e) {
             System.out.println("Exception here: " + e.getMessage());
-        }*/
+        }*//*
 
         // Connect to the first database containing usernames and passwords
         try (Connection conn1 = DriverManager.getConnection(DB_URL_rental, ADMIN_USERNAME, ADMIN_PASSWORD)) {
@@ -52,11 +53,31 @@ public class MSQLConnection {
         }
 
         // Connect to the second database containing only usernames
-        try (Connection conn2 = DriverManager.getConnection(DB_URL_employees, ADMIN_USERNAME, ADMIN_PASSWORD)) {
+        try (Connection conn2 = DriverManager.getConnection(DB_URL_rental, ADMIN_USERNAME, ADMIN_PASSWORD)) {
             // Perform operations on the second database as needed
             // For example, you can retrieve usernames from the 'employees' table in database2
         } catch (SQLException e) {
             System.out.println("IM HERE IN CONN2");
+            e.printStackTrace();
+        }
+    }*/
+
+
+    private void createConnection() {
+        try (Connection conn = DriverManager.getConnection(DB_URL_employees, ADMIN_USERNAME, ADMIN_PASSWORD)) {
+            ArrayList<String> loginInfo = logon();
+            String username = loginInfo.get(0);
+            String password = loginInfo.get(1);
+
+            // Check if the password matches the one in the database
+            boolean passwordMatches = checkPassword(conn, username, password);
+
+            if (passwordMatches) {
+                System.out.println("Password matches for user: " + username);
+            } else {
+                System.out.println("Password does not match for user: " + username);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -83,11 +104,10 @@ public class MSQLConnection {
             statement.setString(1, username);
             statement.setString(2, password);
             try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next(); // If the result set has a next row, the password matches
+                return resultSet.next(); // If the result set has a next row, the username and password match
             }
         }
     }
-
 
    /* public void closeConnection() {
         try {
