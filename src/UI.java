@@ -99,7 +99,8 @@ public  class  UI {
 
     public static void printContract(Contract contract){
         printText("\nContract Id: " + contract.getContractId(), ConsoleColor.WHITE);
-        printText("\nRenter Name: " + contract.getAddress() + ", " + contract.getCity(), ConsoleColor.WHITE);
+        printText("\nRenter Name: " + contract.getRenterName(), ConsoleColor.WHITE);
+        printText("\nRenter Address: " + contract.getAddress() + ", " + contract.getCity(), ConsoleColor.WHITE);
         printText("\nRenter license : " + contract.getLicenseID(), ConsoleColor.WHITE);
         printText("\nCar license plate: " + contract.getNumberPlate(), ConsoleColor.WHITE);
         printText("\nContract period: " + contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.WHITE);
