@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -80,6 +81,23 @@ public class UI {
         Matcher matcher = pattern.matcher(str);
 
         return matcher.find(); // Boolean true if there are only letters in stringInput
+    }
+
+    private void printListOfCars(ArrayList<Car> cars) {
+        System.out.println("The system currently has these cars: ");
+        for (Car car : cars) {
+            System.out.println(car.getNumberplate());
+        }
+    }
+
+    private void CarDetails(Car car) {
+        System.out.println("Here are the details of car: " + car.getNumberplate() +
+                "\nBrand: " + car.getBrand() +
+                "\nCategory: " + car.getCategory() +
+                "\nFuel type: " + car.getFuelType() +
+                "\nMileage: " + car.getMileage() +
+                "\nRegistration date: " + car.getRegistrationDate()
+        );
     }
 
 }

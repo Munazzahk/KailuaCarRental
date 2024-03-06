@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MSQLConnection {
+    String query = "SELECT * FROM profile LIMIT 5;";
     private String database = "jdbc:mysql://localhost:3306/kailua_rental";
-    private String username = "nanna";
-    private String password = "Fandoms33"; //change so that it fits your own
+    private String username = "root";
+    private String password = "shr72cvc"; //change so that it fits your own
     private Connection connection = null;
-
     public  MSQLConnection() {
         createConnection();
     }
@@ -111,6 +111,28 @@ public class MSQLConnection {
         return cars;
     }
 
+    public Car getCar(String platenumber) {
+        String query = "SELECT * FROM car WHERE plate_number = ?";
+        Car car = null;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, platenumber); //Prevents SQL injection attacks
 
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { //To check if there is a car with provided plate number
+                    String plateNumber = rs.getString("plate_number");
+                    String category = rs.getString("category");
+                    String brand = rs.getString("brand");
+                    String fuel = rs.getString("fuel");
+                    LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
+                    int mileage = rs.getInt("mileage");
+                    car = new Car(plateNumber, category, brand, fuel, registrationDate, mileage);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return car;
+    }
 
 }

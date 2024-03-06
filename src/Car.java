@@ -7,7 +7,6 @@ public class Car {
     private String numberplate;
     private LocalDate registrationDate;
     private double mileage; //Km bilen har kørt
-    private CarGroup carGroup; //Enum
 
 
     public Car(String plateNumber, String category, String brand, String fuel, LocalDate registrationDate, int mileage) {
@@ -20,6 +19,30 @@ public class Car {
 
     }
 
+    public String getNumberplate() {
+        return numberplate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public double getMileage() {
+        return mileage;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -29,7 +52,6 @@ public class Car {
                 ", numberplate='" + numberplate + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", mileage=" + mileage +
-                ", carGroup=" + carGroup +
                 '}';
     }
 }
