@@ -5,16 +5,17 @@ import java.util.Scanner;
 
 
 public class SystemManager {
-    MSQLConnection mysqlConnection;
+    MSQLConnection mysqlConnection = new MSQLConnection();
     boolean systemRunning = true;
     MenuBuilder menuBuilder = new MenuBuilder();
 
     public void runProgram() {
-        logon();
-        System.out.println(mysqlConnection.getContract(1));
+        // logon();
+        //System.out.println(mysqlConnection.getContract(1));
        // while (systemRunning) {
           //  runMainMenu();
         //}
+
     }
 
     public void runMainMenu() {
@@ -27,14 +28,17 @@ public class SystemManager {
 
 
     }
-    public void logon(){
+
+
+/*    public void logon(){
+        String employeeUsername, employeePassword;
         Scanner in = new Scanner(System.in);
         System.out.print("Please enter your username: ");
-        String username = in.nextLine();
+        employeeUsername = in.nextLine();
         System.out.print("\nPlease enter your password: ");
-        String password = in.nextLine();
-        mysqlConnection = new  MSQLConnection(username,password);
-    }
+        employeePassword = in.nextLine();
+        mysqlConnection = new  MSQLConnection(employeeUsername,employeePassword);
+    }*/
 
     // never print using toString, this is just for test
     private void printCars(ArrayList<Car> cars) {
