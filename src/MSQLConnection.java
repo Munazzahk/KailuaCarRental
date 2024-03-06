@@ -8,8 +8,8 @@ import java.util.Date;
 public class MSQLConnection {
     String query = "SELECT * FROM profile LIMIT 5;";
     private String database = "jdbc:mysql://localhost:3306/kailua_rental";
-    private String username = "root";
-    private String password = "shr72cvc"; //change so that it fits your own
+    private String username = "";
+    private String password = ""; //change so that it fits your own
     private Connection connection = null;
     public  MSQLConnection() {
         createConnection();
@@ -35,6 +35,7 @@ public class MSQLConnection {
         }
         connection = null;
     }
+
 
 
     public Contract getContract(int contractID) {
@@ -84,12 +85,9 @@ public class MSQLConnection {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
 
-    } else System.out.println("The entered mileage is less then the current mileage");
+    } else System.out.println("The entered mileage is less then the current mileage");}
 
-    }
 
-    // this is just to test. delete and replace with proper method
-    // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
     public ArrayList<Car> getAllCars() {
         ArrayList<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM car;";
@@ -97,9 +95,9 @@ public class MSQLConnection {
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 String plateNumber = rs.getString("plate_number");
-                String category = rs.getString("category");
+                Category category = Category.valueOf(rs.getString("category"));
                 String brand = rs.getString("brand");
-                String fuel = rs.getString("fuel");
+                FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
                 LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
                 int mileage = rs.getInt("mileage");
                 Car car = new Car(plateNumber,category,brand,fuel,registrationDate,mileage);
@@ -111,28 +109,48 @@ public class MSQLConnection {
         return cars;
     }
 
+    // Used same method as the one up there - Check if it is ok
+    // Tested and it works fine
+    // Some things are enums in MYSQL, we need to make enums in JAV - it was Category and FuelType so they are Enums now
     public Car getCar(String platenumber) {
         String query = "SELECT * FROM car WHERE plate_number = ?";
         Car car = null;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, platenumber); //Prevents SQL injection attacks
-
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) { //To check if there is a car with provided plate number
                     String plateNumber = rs.getString("plate_number");
-                    String category = rs.getString("category");
+                    Category category = Category.valueOf(rs.getString("category"));
                     String brand = rs.getString("brand");
-                    String fuel = rs.getString("fuel");
+                    FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
                     LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
                     int mileage = rs.getInt("mileage");
                     car = new Car(plateNumber, category, brand, fuel, registrationDate, mileage);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return car;
     }
+
+    public Renter getRenter(String licenseId) {
+        String query = "SELECT * FROM car WHERE plate_number = ?";
+        Renter renter = null;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, licenseId); //Prevents SQL injection attacks
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { //To check if there is a car with provided plate number
+                    String licnseId = rs.getString("license_id");
+                    renter = new Renter();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return renter;
+    }
+
+
 
 }

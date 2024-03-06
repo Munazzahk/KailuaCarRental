@@ -2,14 +2,14 @@ import java.time.LocalDate;
 
 public class Car {
     private String brand;
-    private String category;
-    private String fuelType; //Kan også laves som enum. Søgte og der er dog alligevel en del
+    private Category category;
+    private FuelType fuelType; //Kan også laves som enum. Søgte og der er dog alligevel en del
     private String numberplate;
     private LocalDate registrationDate;
     private double mileage; //Km bilen har kørt
 
 
-    public Car(String plateNumber, String category, String brand, String fuel, LocalDate registrationDate, int mileage) {
+    public Car(String plateNumber, Category category, String brand, FuelType fuel, LocalDate registrationDate, int mileage) {
     this.numberplate = plateNumber;
     this.category = category;
     this.brand = brand;
@@ -23,7 +23,7 @@ public class Car {
         return numberplate;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
@@ -31,7 +31,7 @@ public class Car {
         return brand;
     }
 
-    public String getFuelType() {
+    public FuelType getFuelType() {
         return fuelType;
     }
 
