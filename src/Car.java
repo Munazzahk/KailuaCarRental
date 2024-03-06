@@ -3,7 +3,7 @@ import java.time.LocalDate;
 public class Car {
     private String brand;
     private Category category;
-    private FuelType fuelType; //Kan også laves som enum. Søgte og der er dog alligevel en del
+    private FuelType fuelType;
     private String numberplate;
     private LocalDate registrationDate;
     private double mileage; //Km bilen har kørt

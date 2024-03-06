@@ -99,14 +99,22 @@ public class UI {
     }
 
     public static void printContract(Contract contract){
-        printText("\nContract Id: " + contract.getContractId(), ConsoleColor.WHITE);
-        printText("\nRenter Name: " + contract.getRenterName(), ConsoleColor.WHITE);
-        printText("\nRenter Address: " + contract.getAddress() + ", " + contract.getCity(), ConsoleColor.WHITE);
-        printText("\nRenter license : " + contract.getLicenseID(), ConsoleColor.WHITE);
-        printText("\nCar license plate: " + contract.getNumberPlate(), ConsoleColor.WHITE);
-        printText("\nContract period: " + contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.WHITE);
-        printText("\nThe mileage at contract commencement : " + contract.getMileage() + "km", ConsoleColor.WHITE);
-        printText("\nMaximum kilometers allowed: " + contract.getMaxKm() + "km", ConsoleColor.WHITE);
+        printText("\nDetails of contract nr: ", ConsoleColor.WHITE);
+        printText(String.valueOf(contract.getContractId()), ConsoleColor.CYAN);
+        printText("\nRenter Name: " , ConsoleColor.WHITE);
+        printText(contract.getRenterName(), ConsoleColor.CYAN);
+        printText("\nRenter Address: ", ConsoleColor.WHITE);
+        printText(contract.getAddress() + ", " + contract.getCity(), ConsoleColor.CYAN);
+        printText("\nRenter license : ", ConsoleColor.WHITE);
+        printText(String.valueOf(contract.getLicenseID()), ConsoleColor.CYAN);
+        printText("\nCar license plate: ", ConsoleColor.WHITE);
+        printText(contract.getNumberPlate(), ConsoleColor.CYAN);
+        printText("\nContract period: ", ConsoleColor.WHITE);
+        printText( contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.CYAN);
+        printText("\nThe mileage at contract commencement : ",ConsoleColor.WHITE);
+        printText(contract.getMileage() + "km", ConsoleColor.CYAN);
+        printText("\nMaximum kilometers allowed: ",ConsoleColor.WHITE);
+        printText(contract.getMaxKm() + "km", ConsoleColor.CYAN);
     }
 
     public static void printWelcome(String username){
@@ -126,57 +134,16 @@ public class UI {
 
     public void printCarDetails(Car car) {
         if (car != null) {
-            System.out.print("Details of car: ");
-            printText(car.getNumberplate(), ConsoleColor.CYAN);
-            System.out.print("\nBrand: ");
-            printText(car.getBrand(), ConsoleColor.CYAN);
-            System.out.print("\nCategory: ");
-            printText(car.getCategory().toString(), ConsoleColor.CYAN);
-            System.out.print("\nFuel type: ");
-            printText(car.getFuelType().toString(), ConsoleColor.CYAN);
-            System.out.print("\nMileage: ");
-            printText(Double.toString(car.getMileage()), ConsoleColor.CYAN);
-            System.out.print("\nRegistration date: ");
-            printText(car.getRegistrationDate().toString(), ConsoleColor.CYAN);
+            printText("Details of car: " + car.getNumberplate(), ConsoleColor.CYAN);
+            printText("\nBrand: " + car.getBrand(), ConsoleColor.CYAN);
+            printText("\nCategory: " + car.getCategory().toString(), ConsoleColor.CYAN);
+            printText("\nFuel type: " + (car.getFuelType().toString()), ConsoleColor.CYAN);
+            printText("\nMileage: "+ Double.toString(car.getMileage()), ConsoleColor.CYAN);
+            printText("\nRegistration date: " + (car.getRegistrationDate().toString()), ConsoleColor.CYAN);
         } else {
             printText("This car is not in the system!", ConsoleColor.RED);
         }
     }
 
-    public void printBasicContractDetails(Contract contract) {
-        if (contract != null) {
-            System.out.print("Details of contract nr: ");
-            printText(Integer.toString(contract.getContractId()), ConsoleColor.CYAN);
-            System.out.print("\nNumber Plate: ");
-            printText(contract.getNumberPlate(), ConsoleColor.CYAN);
-            System.out.print("\nMileage: ");
-            printText(Double.toString(contract.getMileage()), ConsoleColor.CYAN);
-            System.out.print("\nStart date: ");
-            printText(contract.getStartDate().toString(), ConsoleColor.CYAN);
-            System.out.print("\nEnd date: ");
-            printText(contract.getEndDate().toString(), ConsoleColor.CYAN);
-            System.out.print("\nName of renter: ");
-            printText(contract.getRenterName(), ConsoleColor.CYAN);
-        } else {
-            printText("This car is not in the system!", ConsoleColor.RED);
-        }
-    }
-
-    //Kan godt slås sammen med den øverste. Den var bare lang så tænkte at der kan være en basic og en full
-    public void printFullContractDetails(Contract contract) {
-        if (contract != null) {
-            printBasicContractDetails(contract);
-            System.out.print("\nRenters adress: ");
-            printText(contract.getAddress(), ConsoleColor.CYAN);
-            System.out.print("\nRenters city: ");
-            printText(contract.getCity(), ConsoleColor.CYAN);
-            System.out.print("\nMax km: ");
-            printText(Integer.toString(contract.getMaxKm()), ConsoleColor.CYAN);
-            System.out.print("\nLicense ID: ");
-            printText(Integer.toString(contract.getLicenseID()), ConsoleColor.CYAN);
-        } else {
-            printText("This car is not in the system!", ConsoleColor.RED);
-        }
-    }
 
 }

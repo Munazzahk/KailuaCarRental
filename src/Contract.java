@@ -1,6 +1,4 @@
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.MissingFormatArgumentException;
 
 public class Contract {
     private int contractId;
@@ -15,7 +13,8 @@ public class Contract {
     private String numberPlate;
 
 
-    public Contract( int contractId,int licenseID, String renterName, String address, String city, LocalDate startDate,
+    public Contract( int contractId,int licenseID, String renterName,
+                     String address, String city, LocalDate startDate,
                     LocalDate endDate, int maxKm, double mileage, String numberPlate){
         this.contractId = contractId;
         this.renterName =renterName;
@@ -69,34 +68,6 @@ public class Contract {
         return mileage;
     }
 
-    public int getContractId(){
-        return contractId;
-    }
-    public String getRenterName(){
-        return renterName;
-    }
-
-    public String getAddress(){
-        return address;
-    }
-    public String getCity(){
-        return city;
-    }
-    public int getLicenseID(){
-        return licenseID;
-    }
-    public LocalDate getStartDate(){
-        return startDate;
-    }
-    public LocalDate getEndDate(){
-        return  endDate;
-    }
-    public int getMaxKm(){
-        return maxKm;
-    }
-    public String getNumberPlate(){
-        return numberPlate;
-    }
     @Override
     public String toString() {
         return "Contract{" +
