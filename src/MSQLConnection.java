@@ -66,8 +66,11 @@ public class MSQLConnection {
         }
     }*/
 
+    public Connection getConnection(){
+        return  connection;
+    }
 
-    private void createConnection() {
+    public void createConnection() {
         try (Connection conn = DriverManager.getConnection(DB_URL_employees, ADMIN_USERNAME, ADMIN_PASSWORD)) {
             ArrayList<String> loginInfo = logon();
             String username = loginInfo.get(0);
@@ -77,8 +80,8 @@ public class MSQLConnection {
             boolean passwordMatches = checkPassword(conn, username, password);
 
             if (passwordMatches) {
-                System.out.println("Password matches for user: " + username);
-                if (connection != null)
+                UI.printWelcome(username);
+                    if (connection != null)
                     return;
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -87,8 +90,6 @@ public class MSQLConnection {
                     System.out.println(e.getMessage());
                 }
 
-            } else {
-                System.out.println("Password does not match for user: " + username);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,9 +100,9 @@ public class MSQLConnection {
        public ArrayList logon(){
         String employeeUsername, employeePassword;
         Scanner in = new Scanner(System.in);
-        System.out.print("Please enter your username: ");
+        System.out.print("\n Please enter your username: ");
         employeeUsername = in.nextLine();
-        System.out.print("\nPlease enter your password: ");
+        System.out.print("\n Please enter your password: ");
         employeePassword = in.nextLine();
 
         ArrayList usernameAndPassword = new ArrayList();
@@ -112,7 +113,7 @@ public class MSQLConnection {
 
 
     private static boolean checkPassword(Connection connection, String username, String password) throws SQLException {
-        String sql = "SELECT employee_username FROM employees WHERE employee_username = ? ";
+        String sql = "SELECT employee_username FROM employees WHERE BINARY employee_username = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -165,25 +166,21 @@ public class MSQLConnection {
         return contract;
     }
 
-    public void updateContract(int contractID, int km) {
-        Contract contract = getContract(contractID);
-        if (km > contract.getMileage())
-            try {
-                String query = "UPDATE contract SET contract_mileage = ? WHERE contract_id = ?";
-                PreparedStatement stm = connection.prepareStatement(query);
-                stm.setInt(1, km);
-                stm.setInt(2, contractID);
-                stm.executeUpdate();
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-    } else System.out.println("The entered mileage is less then the current mileage");
-
+    public void updateContract(double km, int contractID) {
+        try {
+            String query = "UPDATE contract SET contract_mileage = ? WHERE contract_id = ?";
+            PreparedStatement stm = connection.prepareStatement(query);
+            stm.setDouble(1, km);
+            stm.setInt(2, contractID);
+            stm.executeUpdate();
+            UI.printText("\n Contract updated", ConsoleColor.GREEN);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    // this is just to test. delete and replace with proper method
-    // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
+        // this is just to test. delete and replace with proper method
+        // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
   /*  public ArrayList<Car> getAllCars() {
         ArrayList<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM car;";
@@ -206,6 +203,4 @@ public class MSQLConnection {
     }*/
 
 
-
-
-}
+    }

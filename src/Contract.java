@@ -32,6 +32,35 @@ public class Contract {
     public double getMileage(){
         return mileage;
     }
+
+    public int getContractId(){
+        return contractId;
+    }
+    public String getRenterName(){
+        return renterName;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+    public String getCity(){
+        return city;
+    }
+    public int getLicenseID(){
+        return licenseID;
+    }
+    public LocalDate getStartDate(){
+        return startDate;
+    }
+    public LocalDate getEndDate(){
+        return  endDate;
+    }
+    public int getMaxKm(){
+        return maxKm;
+    }
+    public String getNumberPlate(){
+        return numberPlate;
+    }
     @Override
     public String toString() {
         return "Contract{" +

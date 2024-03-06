@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UI {
+public  class  UI {
     private static Scanner in = new Scanner(System.in);
 
     public static void printText(String text, ConsoleColor color) {
@@ -27,7 +27,7 @@ public class UI {
     }
 
     public static int getIntInput() {
-        int intInput = Integer.MIN_VALUE;
+        int intInput = Integer.MIN_VALUE; //change, not a good way to do it
         while (intInput == Integer.MIN_VALUE){
             try {
                 intInput = in.nextInt();
@@ -40,6 +40,21 @@ public class UI {
         }
         return intInput;
     }
+    public static double getDoubleInput() {
+        double doubleInput = Integer.MIN_VALUE; //change, not a good way to do it
+        while (doubleInput == Integer.MIN_VALUE){
+            try {
+                doubleInput = in.nextDouble();
+                in.nextLine(); //Scanner bug
+            }
+            catch (InputMismatchException e){
+                printText(" Input not recognized, please enter a number: ", ConsoleColor.RED);
+                in.next();
+            }
+        }
+        return doubleInput;
+    }
+
 
     public boolean getBooleanInput() {
         String booleanInput = in.nextLine();
@@ -81,5 +96,23 @@ public class UI {
 
         return matcher.find(); // Boolean true if there are only letters in stringInput
     }
+
+    public static void printContract(Contract contract){
+        printText("\nContract Id: " + contract.getContractId(), ConsoleColor.WHITE);
+        printText("\nRenter Name: " + contract.getAddress() + ", " + contract.getCity(), ConsoleColor.WHITE);
+        printText("\nRenter license : " + contract.getLicenseID(), ConsoleColor.WHITE);
+        printText("\nCar license plate: " + contract.getNumberPlate(), ConsoleColor.WHITE);
+        printText("\nContract period: " + contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.WHITE);
+        printText("\nThe mileage at contract commencement : " + contract.getMileage() + "km", ConsoleColor.WHITE);
+        printText("\nMaximum kilometers allowed: " + contract.getMaxKm() + "km", ConsoleColor.WHITE);
+    }
+
+    public static void printWelcome(String username){
+        String[] parts = username.split("(?<=\\D)(?=\\d)");
+        UI.printText("\n WELCOME " + parts[0].toUpperCase(), ConsoleColor.GREEN);
+
+
+    }
+
 
 }
