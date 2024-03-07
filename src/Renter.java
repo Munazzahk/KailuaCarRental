@@ -16,8 +16,8 @@ public class Renter {
     private int licenseId;
     private Date licenseDate;
 
-    public Renter(String fullName, String address, int zipCode, String city, int phone,
-                  String email, int licenseId, Date licenseDate, String state, int cellPhone) {
+    public Renter(String fullName, String address, int zipCode, String city,String state, int phone,
+                  int cellPhone, String email, int licenseId, Date licenseDate) {
         setFullName(fullName);
         setAddress(address);
         setZipCode(zipCode);

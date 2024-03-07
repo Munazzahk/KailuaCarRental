@@ -1,7 +1,13 @@
+import javax.swing.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -13,6 +19,25 @@ public class UI {
     public static void printText(String text, ConsoleColor color) {
         System.out.print(color + text + ConsoleColor.RESET);
     }
+
+    public static LocalDate getDateInput(String dateString) throws ParseException {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+            // Parse the input string to a LocalDate object
+            LocalDate localDate = LocalDate.parse(dateString, dateFormatter);
+            return localDate;
+        } catch (Exception e) {
+            // If parsing fails, throw an error indicating invalid date format
+            throw new ParseException("Invalid date format. Please enter a date in the format yyyy-MM-dd", 0);
+        }
+    }
+
+
+
+
+
+
 
     // Getting inout methods
     public static String getStringInput() {
@@ -60,7 +85,7 @@ public class UI {
     }
 
 
-    public boolean getBooleanInput() {
+    public static boolean getBooleanInput() {
         String booleanInput = in.nextLine();
 
         while (!isStringBoolean(booleanInput)) {
@@ -71,7 +96,7 @@ public class UI {
     }
 
     /// private boolean methods to check data type
-    private boolean isStringBoolean(String strBool) {
+    private static boolean isStringBoolean(String strBool) {
         if (strBool.equalsIgnoreCase("y")
                 || strBool.equalsIgnoreCase("true")
                 || strBool.equalsIgnoreCase("yes")
@@ -83,7 +108,7 @@ public class UI {
     }
 
 
-    private boolean whichBooleanIsString(String strBool) {
+    private static boolean whichBooleanIsString(String strBool) {
         if (strBool.equalsIgnoreCase("y")
                 || strBool.equalsIgnoreCase("t")
                 || strBool.equalsIgnoreCase("true")
@@ -128,14 +153,45 @@ public class UI {
     }
 
 
-    public void printListOfCars(ArrayList<Car> cars) {
-        System.out.println("The system currently has these cars: ");
-        for (Car car : cars) {
-            printText(" - " + car.getNumberplate(), ConsoleColor.CYAN);
+    public static void printListOfCars(ArrayList<Car> cars) {
+        for (int i = 0; i < cars.size(); i++) {
+            Car car = cars.get(i);
+            printText("\n" + (i + 1) + ") " + car.getBrand(), ConsoleColor.CYAN);
+        }
+        printText("\n", ConsoleColor.WHITE);
+    }
+
+    public static void printListOfRenters(ArrayList<Renter> renters) {
+        for (int i = 0; i < renters.size(); i++) {
+            Renter renter = renters.get(i);
+            printText("\n" + (i + 1) + ") " + renter.getFullName(), ConsoleColor.CYAN);
+        }
+        printText("\n", ConsoleColor.WHITE);
+    }
+    public static void printListOfContracts(ArrayList<Contract> contracts) {
+        for (int i = 0; i < contracts.size(); i++) {
+            Contract contract = contracts.get(i);
+            printText("\n ContractID: " + contract.getContractId() +" Car: " + contract.getNumberPlate() + " Renter-name: " + contract.getRenterName(), ConsoleColor.CYAN);
+        }
+        printText("\n", ConsoleColor.WHITE);
+    }
+
+    public static void printRenterDetails(Renter renter){
+        if (renter != null) {
+            printText(" Details of renterID: " + renter.getLicenseId(), ConsoleColor.CYAN);
+            printText("\n FullName: " + renter.getFullName(), ConsoleColor.CYAN);
+            printText("\n Address: " + renter.getAddress() + ", " + renter.getCity() + ", "+ renter.getState(), ConsoleColor.CYAN);
+            printText("\n Zipcode: " + renter.getZipCode(), ConsoleColor.CYAN);
+            printText("\n Phone: "+ renter.getPhone(), ConsoleColor.CYAN);
+            printText("\n CellPhone: "+ renter.getCellPhone(), ConsoleColor.CYAN);
+            printText("\n Email: " + renter.getEmail(), ConsoleColor.CYAN);
+            printText("\n LicenseDate: " + renter.getLicenseDate(), ConsoleColor.CYAN);
+        } else {
+            printText("This renter is not in the system!", ConsoleColor.RED);
         }
     }
 
-    public void printCarDetails(Car car) {
+    public static void printCarDetails(Car car) {
         if (car != null) {
             printText("Details of car: " + car.getNumberplate(), ConsoleColor.CYAN);
             printText("\nBrand: " + car.getBrand(), ConsoleColor.CYAN);
@@ -147,7 +203,90 @@ public class UI {
             printText("This car is not in the system!", ConsoleColor.RED);
         }
     }
+    public static LocalDate getStartDate() {
+        printText("\n Enter the start of the contract period: ", ConsoleColor.RESET);
+        LocalDate startDate = enterDate();
+        return startDate;
+    }
 
+
+    public static LocalDate getEndDate() {
+        printText("\n Enter the end of the contract period: ", ConsoleColor.RESET);
+        LocalDate endDate = enterDate();
+        return endDate;
+    }
+
+
+    public static LocalDate enterDate() {
+        int day = 0;
+        int month = 0;
+        int year = 0;
+
+        do {
+            try {
+                System.out.print("\n Please give the day in format 'DD': ");
+                int inputDay = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                if (inputDay < 1 || inputDay > 31) {
+                    System.out.println(" Invalid day. Please ensure the day is between 1 and 31.");
+                    continue; // Invalid day, loop again
+                }
+                day = inputDay;
+
+                System.out.print(" Please give the month in format 'MM': ");
+                int inputMonth = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                if (inputMonth < 1 || inputMonth > 12) {
+                    System.out.println(" Invalid month. Please ensure the month is between 1 and 12.");
+                    continue; // Invalid month, loop again
+                }
+                month = inputMonth;
+
+                System.out.print(" Please give the year in format 'YYYY': ");
+                int inputYear = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                // should have someway to ensure we can't make a contract back in time
+                if (inputYear < 1950 || inputYear > 2030) {
+                    System.out.println(" Invalid year. Please ensure the year is between 1950 and 2030.");
+                    continue; // Invalid year, loop again
+                }
+                year = inputYear;
+
+            } catch (InputMismatchException e) {
+                System.out.println(" Invalid input. Please enter numeric values for the date.");
+                in.nextLine(); // Clear the input buffer
+            }
+        } while (year == 0); // runs until a valid date is entered
+        return LocalDate.of(year, month, day);
+    }
+
+    public static void printCategories(){
+        int count = 0;
+        for (Category c : Category.values()){
+            count += 1;
+            printText("\n " + count + ") "+c, ConsoleColor.CYAN);
+        }
+        printText("\n", ConsoleColor.WHITE);
+    }
+    public static String getEmail(){
+        String email = null;
+        do {
+            UI.printText(" Email: ", ConsoleColor.WHITE);
+            email = getStringWithNumbersInput();
+        } while (!checkValidEmail(email));
+        return email;
+    }
+    private static boolean checkValidEmail(String email){
+        if (email.contains("@")) {
+            return  true;
+        } else {
+            System.out.println(" invalid email");
+            return false;
+        }
+    }
     public static Date getDate(){
         String licenseDateString;
         Date licenseDate;
@@ -184,6 +323,7 @@ public class UI {
         } catch (ParseException e) {
             UI.printText("Wrong input format \n", ConsoleColor.RED);
             return null;
+
         }
     }
 }
