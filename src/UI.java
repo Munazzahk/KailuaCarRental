@@ -1,13 +1,9 @@
-import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -298,22 +294,8 @@ public class UI {
         return licenseDate;
     }
 
-    public static String getEmail(){
-        String email = null;
-        do {
-            UI.printText(" Email: ", ConsoleColor.WHITE);
-            email = getStringWithNumbersInput();
-        } while (!checkValidEmail(email));
-        return email;
-    }
-    private static boolean checkValidEmail(String email){
-        if (email.contains("@")) {
-            return  true;
-        } else {
-            System.out.println(" invalid email");
-            return false;
-        }
-    }
+
+
 
     public static Date convertToSqlDate(String dateString) {
         try {
