@@ -1,5 +1,6 @@
 import com.mysql.cj.MysqlConnection;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,6 +9,7 @@ public class SystemManager {
     MSQLConnection mysqlConnection;
     boolean systemRunning = true;
     MenuBuilder menuBuilder = new MenuBuilder();
+    UI ui = new UI();
 
     public void runProgram() {
         mysqlConnection = new MSQLConnection();
@@ -16,8 +18,9 @@ public class SystemManager {
             mysqlConnection.createConnection();
         }
        while (systemRunning) {
-            runMainMenu();
-        }
+           //getCarsByTimePeriod();
+           runMainMenu();
+       }
 
     }
 
@@ -63,10 +66,32 @@ public class SystemManager {
         }
     }
 
-    // never print using toString, this is just for test
-    private void printCars(ArrayList<Car> cars) {
-        for (Car c : cars) {
-            System.out.println(c);
-        }
+    //Den virker i hvert fald
+    public void getCarsByTimePeriod() {
+        LocalDate newStartDate = ui.getStartDate();
+        LocalDate newEndDate = ui.getEndDate();
+        ui.printListOfCars(mysqlConnection.getCarsByTimePeriod(newStartDate, newEndDate));
+
     }
+
+    //Har lagt den her lige nu fordi jeg ikke ved hvor den skulle hen
+    //Hvis den har egen klasse er det måske lidt for unødvendigt? eller ikke?
+    //Igen der skal lige spørges om category som så skal indsættes her
+    public ArrayList<Car> sortCarByCategory(ArrayList<Car> cars, Category category) {
+        ArrayList<Car> sortedCars = new ArrayList<>();
+
+        for (Car car : cars) {
+            if (car.getCategory() == category) {
+                sortedCars.add(car);
+            }
+        }
+        return sortedCars;
+    }
+
+    //Sorts car by category family... category should be an input
+    public void sortCars() {
+        ui.printListOfCars(sortCarByCategory(mysqlConnection.getAllCars(), Category.Family));
+    }
+
+
 }

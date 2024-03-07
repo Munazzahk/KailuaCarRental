@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -126,9 +128,8 @@ public class UI {
 
 
     public void printListOfCars(ArrayList<Car> cars) {
-        System.out.println("The system currently has these cars: ");
         for (Car car : cars) {
-            printText(" - " + car.getNumberplate(), ConsoleColor.CYAN);
+            printText("\n - " + car.getNumberplate(), ConsoleColor.CYAN);
         }
     }
 
@@ -144,6 +145,67 @@ public class UI {
             printText("This car is not in the system!", ConsoleColor.RED);
         }
     }
+
+    //Kan ændres farve hvis der er brug for det
+    public LocalDate getStartDate() {
+        printText("\nEnter the start of the period: ", ConsoleColor.RESET);
+        LocalDate startDate = enterDate();
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        printText("\nEnter the end of the period: ", ConsoleColor.RESET);
+        LocalDate endDate = enterDate();
+        return endDate;
+    }
+
+    private LocalDate enterDate() {
+        int day = 0;
+        int month = 0;
+        int year = 0;
+
+        do {
+            try {
+                System.out.print("\nPlease give the day in format 'DD': ");
+                int inputDay = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                if (inputDay < 1 || inputDay > 31) {
+                    System.out.println("Invalid day. Please ensure the day is between 1 and 31.");
+                    continue; // Invalid day, loop again
+                }
+                day = inputDay;
+
+                System.out.print("Please give the month in format 'MM': ");
+                int inputMonth = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                if (inputMonth < 1 || inputMonth > 12) {
+                    System.out.println("Invalid month. Please ensure the month is between 1 and 12.");
+                    continue; // Invalid month, loop again
+                }
+                month = inputMonth;
+
+                System.out.print("Please give the year in format 'YYYY': ");
+                int inputYear = in.nextInt();
+                in.nextLine(); // Consume the newline character left in the buffer
+
+                //Nogle kontrakter har dato inden dette år, altså i 1900-tallet så har brugt 1950 som minimum
+                if (inputYear < 1950 || inputYear > 2030) {
+                    System.out.println("Invalid year. Please ensure the year is between 1950 and 2030.");
+                    continue; // Invalid year, loop again
+                }
+                year = inputYear;
+
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter numeric values for the date.");
+                in.nextLine(); // Clear the input buffer
+            }
+        } while (year == 0); // runs until a valid date is entered
+        return LocalDate.of(year, month, day);
+    }
+
+
 
 
 }

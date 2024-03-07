@@ -34,7 +34,7 @@ public class MSQLConnection {
             if (passwordMatches) {
                 UI.printWelcome(username);
                     if (connection != null)
-                    return;
+                        return;
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     connection = DriverManager.getConnection(DB_URL_rental, username, password);
@@ -177,6 +177,35 @@ public class MSQLConnection {
             e.printStackTrace();
         }
         return car;
+    }
+
+    public ArrayList<Car> getCarsByTimePeriod(LocalDate startDate, LocalDate endDate) {
+        ArrayList<Car> availableCars = new ArrayList<>();
+
+        String query = "SELECT * FROM car c " +
+                "LEFT JOIN contract con ON  c.plate_number = con.plate_number " +
+                "WHERE con.plate_number IS NULL OR " +
+                "NOT (con.start_date <= ? AND con.end_date >= ?);";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDate(1, java.sql.Date.valueOf(endDate));
+            stmt.setDate(2, java.sql.Date.valueOf(startDate));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String plateNumber = rs.getString("plate_number");
+                    Category category = Category.valueOf(rs.getString("category"));
+                    String brand = rs.getString("brand");
+                    FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
+                    LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
+                    int mileage = rs.getInt("mileage");
+                    Car car = new Car(plateNumber,category,brand,fuel,registrationDate,mileage);
+                    availableCars.add(car);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return availableCars;
     }
 
     public Renter getRenter(String licenseId) {
