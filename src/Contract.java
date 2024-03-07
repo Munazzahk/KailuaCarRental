@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.sql.Date;
 
 public class Contract {
     private int contractId;
@@ -6,16 +7,16 @@ public class Contract {
     private String address;
     private String city;
     private int licenseID;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
     private int maxKm;
     private double mileage;
     private String numberPlate;
 
 
     public Contract( int contractId,int licenseID, String renterName,
-                     String address, String city, LocalDate startDate,
-                    LocalDate endDate, int maxKm, double mileage, String numberPlate){
+                     String address, String city, Date startDate,
+                    Date endDate, int maxKm, double mileage, String numberPlate){
         this.contractId = contractId;
         this.renterName =renterName;
         this.address = address;
@@ -48,11 +49,11 @@ public class Contract {
         return maxKm;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 

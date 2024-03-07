@@ -1,4 +1,10 @@
+import javax.swing.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -11,8 +17,27 @@ public class UI {
         System.out.print(color + text + ConsoleColor.RESET);
     }
 
+    public static LocalDate getDateInput(String dateString) throws ParseException {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+            // Parse the input string to a LocalDate object
+            LocalDate localDate = LocalDate.parse(dateString, dateFormatter);
+            return localDate;
+        } catch (Exception e) {
+            // If parsing fails, throw an error indicating invalid date format
+            throw new ParseException("Invalid date format. Please enter a date in the format yyyy-MM-dd", 0);
+        }
+    }
+
+
+
+
+
+
+
     // Getting inout methods
-    public String getStringInput() {
+    public static String getStringInput() {
         String stringInput = in.nextLine();
 
         while (!isString(stringInput)) {
@@ -89,7 +114,7 @@ public class UI {
         } else {return false;}
     }
 
-    private boolean isString(String str) {
+    private static boolean isString(String str) {
         Pattern pattern = Pattern.compile("^[a-zA-ZåäöøæÅÄÖØÆéèêëÉÈÊËíìîïÍÌÎÏóòôõöÓÒÔÕÖúùûüÚÙÛÜÁáÀàÂâÃãÄäÇçÐðÉéÊêËëÍíÎîÏïÑñÓóÔôÕõÖöÚúÛûÜüÝýÿ\\s\\-',.]+$"); // regex - complicated - Pattern for letters and a few special characters
 
         //check if StringInput matches our letter pattern

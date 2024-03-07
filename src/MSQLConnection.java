@@ -104,12 +104,12 @@ public class MSQLConnection {
                 String renterName = rs.getString("fullname");
                 String address = rs.getString("address");
                 String city = rs.getString("city");
-                LocalDate startDate = rs.getDate("start_date").toLocalDate();
-                LocalDate endDate = rs.getDate("end_date").toLocalDate();
+                Date startDate = rs.getDate("start_date");
+                Date endDate = rs.getDate("end_date");
                 int maxKm = rs.getInt("max_km");
                 double mileage = rs.getDouble("contract_mileage");
                 String numberPlate = rs.getString("c.plate_number");
-                contract  = new Contract(contractID,licenseID,renterName,address,city,startDate,endDate,maxKm,mileage,numberPlate);
+                contract  = new Contract(contractID,licenseID,renterName,address,city, (java.sql.Date) startDate, (java.sql.Date) endDate,maxKm,mileage,numberPlate);
             }
 
         } catch (Exception e) {
@@ -196,6 +196,26 @@ public class MSQLConnection {
         return renter;
     }
 
+    public void createContract(Contract contract) {
+        try {
+            String query = "INSERT INTO contract (contract_id, plate_number, license_id, start_date, end_date, max_km, contract_mileage)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, contract.getContractId());
+            statement.setString(2, contract.getNumberPlate());
+            statement.setInt(2, contract.getLicenseID());
+            statement.setDate(2, contract.getStartDate());
+            statement.setDate(2, contract.getEndDate());
+            statement.setInt(2, contract.getMaxKm());
+            statement.setDouble(2, contract.getMileage());
 
-
+            statement.executeUpdate();
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Contract created.");
+            } else {
+                System.out.println("Contract not created.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
