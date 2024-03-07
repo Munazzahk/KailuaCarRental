@@ -85,6 +85,8 @@ public class SystemManager {
     public void updateContract() {
         Contract contract = getContract();
         UI.printText("\n UPDATING CONTRACT", ConsoleColor.WHITE);
+        UI.printText("\n\n The current mileage is: ", ConsoleColor.WHITE);
+        UI.printText(Double.toString(contract.getMileage()), ConsoleColor.CYAN);
         if (contract != null) {
             UI.printText("\n Please enter the new mileage in km: ", ConsoleColor.WHITE);
             double km = UI.getDoubleInput();
@@ -94,18 +96,9 @@ public class SystemManager {
         }
     }
 
-
-
-
-    // never print using toString, this is just for test
-    private void printCars(ArrayList<Car> cars) {
-        for (Car c : cars) {
-            System.out.println(c);
-        }
-    }
-
     public Category chooseCategory() {
         Category category = null;
+        UI.printText("\n Please choose a category: ", ConsoleColor.WHITE);
         int choice = UI.getIntInput();
         switch (choice) {
             case 1 -> category = Category.Luxury;
@@ -122,17 +115,22 @@ public class SystemManager {
         LocalDate newStartDate = UI.getStartDate();
         LocalDate newEndDate = UI.getEndDate();
         ArrayList<Car> listOfAvailableCars = getListOfAvailableCars(newStartDate, newEndDate);
-        UI.printText("\n Please choose a category: ", ConsoleColor.WHITE);
-        UI.printCategories();
-        Category category = chooseCategory();
-        UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
-        listOfAvailableCars = sortCarByCategory(listOfAvailableCars, category);
-        Car car = chooseCar(listOfAvailableCars);
-        Renter renter = getARenter();
-        UI.printText("\n Please provide the maximum mileage (km): ", ConsoleColor.WHITE);
-        int max_km = UI.getIntInput();
-        mysqlConnection.createContract(renter,car, java.sql.Date.valueOf(newStartDate),java.sql.Date.valueOf(newEndDate),max_km);
-
+            UI.printText("\n The following categories are available: ", ConsoleColor.WHITE);
+            UI.printCategories();
+            Category category = chooseCategory();
+            listOfAvailableCars = sortCarByCategory(listOfAvailableCars, category);
+            if (listOfAvailableCars.size() != 0) {
+                UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
+            Car car = chooseCar(listOfAvailableCars);
+            Renter renter = getARenter();
+            if(renter!=null) {
+                UI.printText("\n Please provide the maximum mileage (km): ", ConsoleColor.WHITE);
+                int max_km = UI.getIntInput();
+                mysqlConnection.createContract(renter, car, java.sql.Date.valueOf(newStartDate), java.sql.Date.valueOf(newEndDate), max_km);
+            }
+        } else {
+            UI.printText("\n There are no available cars", ConsoleColor.RED);
+        }
     }
 
     public Renter getARenter(){
@@ -142,9 +140,15 @@ public class SystemManager {
             return createRenter();
         }
         else {
-            UI.printText("\n Please choose an existing renter: ", ConsoleColor.WHITE);
             ArrayList<Renter> renters = mysqlConnection.getAllRenters();
-            return chooseRenter(renters);
+            if(renters.size()!= 0) {
+                UI.printText("\n Please choose an existing renter: ", ConsoleColor.WHITE);
+                return chooseRenter(renters);
+            }
+            else {
+                UI.printText("\n There are no existing renters", ConsoleColor.RED);
+                return null;
+            }
         }
     }
 
@@ -195,14 +199,16 @@ public class SystemManager {
 
     public Car chooseCar(ArrayList<Car> cars){
         Car car = null;
-        while(car == null){
-        UI.printListOfCars(cars);
-        int choice = UI.getIntInput();
-        car =  getCarByIndex(cars, choice);}
+        while(car == null) {
+            UI.printListOfCars(cars);
+            UI.printText("\n Please provide the carID of the car you wish to access: ", ConsoleColor.WHITE);
+            int choice = UI.getIntInput();
+            car =  getCarByIndex(cars, choice);}
         return car;
     }
 
     public Car getCarByIndex(ArrayList<Car> cars, int index) {
+
         if (index >= 1 && index <= cars.size()) {
             return cars.get(index - 1);
         } else {
@@ -214,6 +220,7 @@ public class SystemManager {
         Renter renter = null;
         while(renter == null){
             UI.printListOfRenters(renters);
+            UI.printText("\n Please provide the renterID of the renter you wish to access: ", ConsoleColor.WHITE);
             int choice = UI.getIntInput();
             renter =  getRenterByIndex(renters, choice);}
         return renter;
