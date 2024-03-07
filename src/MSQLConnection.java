@@ -154,9 +154,7 @@ public class MSQLConnection {
         return cars;
     }
 
-    // Used same method as the one up there - Check if it is ok
-    // Tested and it works fine
-    // Some things are enums in MYSQL, we need to make enums in JAV - it was Category and FuelType so they are Enums now
+
     public Car getCar(String platenumber) {
         String query = "SELECT * FROM car WHERE plate_number = ?";
         Car car = null;
@@ -177,6 +175,32 @@ public class MSQLConnection {
             e.printStackTrace();
         }
         return car;
+    }
+
+    public void createRenter(Renter renter) {
+
+        try  {
+            String sql = "INSERT INTO renter (license_id, fullname, address, zip_code, city, state, cellphone, phone, email, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, renter.getLicenseId());
+            statement.setString(2, renter.getFullName());
+            statement.setString(3, renter.getAddress());
+            statement.setInt(4, renter.getZipCode());
+            statement.setString(5, renter.getCity());
+            statement.setString(6, renter.getState());
+            statement.setInt(7, renter.getCellPhone());
+            statement.setInt(8, renter.getPhone());
+            statement.setString(9, renter.getEmail());
+            statement.setDate(10, (java.sql.Date) renter.getLicenseDate());
+
+            int rowInserted = statement.executeUpdate();
+            if (rowInserted > 0) {
+                System.out.println("Renter created successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public Renter getRenter(String licenseId) {
