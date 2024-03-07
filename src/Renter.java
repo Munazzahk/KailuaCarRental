@@ -168,19 +168,8 @@ public class Renter {
 
         scanner.close();
 
-        Renter renters = new Renter();
-        renters.setFullName(fullName);
-        renters.setAddress(address);
-        renters.setZip_code(zipCode);
-        renters.setCity(city);
-        renters.setState(state);
-        renters.setPhone(phone);
-        renters.setCellPhone(cellPhone);
-        renters.setEmail(email);
-        renters.setLicense_id(license_id);
-        renters.setLicense_date(license_date);
 
-        return renters;
+        return new Renter(fullName,address, zipCode, city, phone, email, license_id, license_date, state, cellPhone);
     }
 
     public void insertIntoDatabase() {
