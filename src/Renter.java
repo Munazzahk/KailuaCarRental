@@ -27,6 +27,17 @@ public class Renter {
         this.license_date = license_date;
         this.state = state;
         this.cellPhone = cellPhone;
+
+        setFullName(fullName);
+        setAddress(address);
+        setZip_code(zip_code);
+        setCity(city);
+        setPhone(phone);
+        setEmail(email);
+        setLicense_id(license_id);
+        setLicense_date(license_date);
+        setState(state);
+        setCellPhone(cellPhone);
     }
 
     public Renter() {
@@ -169,7 +180,8 @@ public class Renter {
         scanner.close();
 
 
-        return new Renter(fullName,address, zipCode, city, phone, email, license_id, license_date, state, cellPhone);
+        Renter newRenter = new Renter(fullName, address, zipCode, city, phone, email, license_id, license_date, state, cellPhone);
+        return newRenter;
     }
 
     public void insertIntoDatabase() {
