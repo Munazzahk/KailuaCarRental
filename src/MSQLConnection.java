@@ -132,7 +132,6 @@ public class MSQLConnection {
     }
 
     // this is just to test. delete and replace with proper method
-    // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
     public ArrayList<Car> getAllCars() {
         ArrayList<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM car;";
@@ -153,6 +152,7 @@ public class MSQLConnection {
         }
         return cars;
     }
+
 
      public Car getCar(String platenumber) {
         String query = "SELECT * FROM car WHERE plate_number = ?";
@@ -234,7 +234,12 @@ public class MSQLConnection {
     public   ArrayList<Contract>  getAllContracts() {
         ArrayList<Contract> contracts = new ArrayList<>();
         try  {
-            String query = "SELECT * FROM contract;";
+            String query =    " SELECT contract_id ,fullname, address, " +
+                    "city, c.license_id ,start_date ," +
+                    " end_date , c.plate_number ," +
+                    " max_km , contract_mileage \n" +
+                    "FROM contract c JOIN\n" +
+                    "renter r ON  c.license_id = r.license_id;";
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -246,7 +251,7 @@ public class MSQLConnection {
                 Date startDate = rs.getDate("start_date");
                 Date endDate = rs.getDate("end_date");
                 int maxKm = rs.getInt("max_km");
-                double mileage = rs.getDouble("mileage");
+                double mileage = rs.getDouble("contract_mileage");
                 String numberPlate = rs.getString("plate_number");
                 Contract contract = new Contract( contractID,licenseId, renterName,
                         address, city,  (java.sql.Date)startDate,
@@ -264,8 +269,10 @@ public class MSQLConnection {
             String query = " DELETE FROM contract WHERE contract_id = ?;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1,contractID);
+            statement.executeUpdate();
+            UI.printText("\n Contract Deleted", ConsoleColor.GREEN);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            UI.printText("\n Something went wrong, try again later", ConsoleColor.RESET);
         }
     }
 
@@ -288,7 +295,6 @@ public class MSQLConnection {
                 System.out.println("Contract not created.");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
     public ArrayList<Car> getCarsByTimePeriod(LocalDate startDate, LocalDate endDate) {

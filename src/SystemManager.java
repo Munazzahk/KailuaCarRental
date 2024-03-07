@@ -26,17 +26,45 @@ public class SystemManager {
             case "1" -> makeContract();
             case "2" -> viewContract();
             case "3" -> updateContract();
-            case "4" -> System.out.println("coming soon");
-            case "q" -> systemRunning = false;
+            case "4" -> deleteContract();
+            case "5" -> viewCarDetails();
+            case "6" ->viewRenterDetails();
+            case "q" -> {UI.printText("\n GOODBYE :)", ConsoleColor.GREEN)
+                        ;systemRunning = false;}
             default -> UI.printText(" Not an option", ConsoleColor.RED);
         }
     }
 
+    public void viewCarDetails(){
+        UI.printText("\n VIEWING CARS", ConsoleColor.WHITE);
+        ArrayList<Car> cars = mysqlConnection.getAllCars();
+        Car car = chooseCar(cars);
+        UI.printCarDetails(car);
+    }
+
+    public void viewRenterDetails(){
+        UI.printText("\n VIEWING RENTERS", ConsoleColor.WHITE);
+        ArrayList<Renter> renters = mysqlConnection.getAllRenters();
+        Renter renter = chooseRenter(renters);
+        UI.printRenterDetails(renter);
+    }
+
+    public void deleteContract(){
+        int contractId = chooseContractID();
+        UI.printText("\n DELETING CONTRACT", ConsoleColor.WHITE);
+        mysqlConnection.deleteContract(contractId);
+    }
+
+    public int chooseContractID(){
+        UI.printText("\n VIEWING CONTRACTS", ConsoleColor.WHITE);
+        UI.printListOfContracts(mysqlConnection.getAllContracts());
+        UI.printText("\n Please provide the contractID of the contract you wish to access: ", ConsoleColor.WHITE);
+        return  UI.getIntInput();
+    }
+
 
     public Contract getContract() {
-        UI.printListOfContracts(mysqlConnection.getAllContracts());
-        UI.printText(" Please provide the contractID of the contract you wish to access: ", ConsoleColor.WHITE);
-        int contractId = UI.getIntInput();
+        int contractId = chooseContractID();
         Contract contract = mysqlConnection.getContract(contractId);
         if (contract == null) {
             UI.printText("\n No contract with this ID", ConsoleColor.RED);
@@ -53,6 +81,7 @@ public class SystemManager {
 
     public void updateContract() {
         Contract contract = getContract();
+        UI.printText("\n UPDATING CONTRACT", ConsoleColor.WHITE);
         if (contract != null) {
             UI.printText("\n Please enter the new mileage in km: ", ConsoleColor.WHITE);
             double km = UI.getDoubleInput();
@@ -93,7 +122,6 @@ public class SystemManager {
         UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
         listOfAvailableCars = sortCarByCategory(listOfAvailableCars, category);
         Car car = chooseCar(listOfAvailableCars);
-        System.out.println(car.getBrand() +car.getNumberplate());
         Renter renter = getARenter();
         UI.printText("\n Please provide the maximum mileage (km): ", ConsoleColor.WHITE);
         int max_km = UI.getIntInput();

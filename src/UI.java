@@ -168,13 +168,27 @@ public class UI {
     public static void printListOfContracts(ArrayList<Contract> contracts) {
         for (int i = 0; i < contracts.size(); i++) {
             Contract contract = contracts.get(i);
-            printText("\n ContractID: " + contract.getContractId() +" Car: " + contract.getNumberPlate() + " Renter name: " + contract.getRenterName(), ConsoleColor.CYAN);
+            printText("\n ContractID: " + contract.getContractId() +" Car: " + contract.getNumberPlate() + " Renter-name: " + contract.getRenterName(), ConsoleColor.CYAN);
         }
         printText("\n", ConsoleColor.WHITE);
     }
 
+    public static void printRenterDetails(Renter renter){
+        if (renter != null) {
+            printText(" Details of renterID: " + renter.getLicenseId(), ConsoleColor.CYAN);
+            printText("\n FullName: " + renter.getFullName(), ConsoleColor.CYAN);
+            printText("\n Address: " + renter.getAddress() + ", " + renter.getCity() + ", "+ renter.getState(), ConsoleColor.CYAN);
+            printText("\n Zipcode: " + renter.getZipCode(), ConsoleColor.CYAN);
+            printText("\n Phone: "+ renter.getPhone(), ConsoleColor.CYAN);
+            printText("\n CellPhone: "+ renter.getCellPhone(), ConsoleColor.CYAN);
+            printText("\n Email: " + renter.getEmail(), ConsoleColor.CYAN);
+            printText("\n LicenseDate: " + renter.getLicenseDate(), ConsoleColor.CYAN);
+        } else {
+            printText("This renter is not in the system!", ConsoleColor.RED);
+        }
+    }
 
-    public void printCarDetails(Car car) {
+    public static void printCarDetails(Car car) {
         if (car != null) {
             printText("Details of car: " + car.getNumberplate(), ConsoleColor.CYAN);
             printText("\nBrand: " + car.getBrand(), ConsoleColor.CYAN);
