@@ -84,6 +84,7 @@ public class SystemManager {
 
     public void updateContract() {
         Contract contract = getContract();
+        if(contract!=null){
         UI.printText("\n UPDATING CONTRACT", ConsoleColor.WHITE);
         UI.printText("\n\n The current mileage is: ", ConsoleColor.WHITE);
         UI.printText(Double.toString(contract.getMileage()), ConsoleColor.CYAN);
@@ -93,6 +94,7 @@ public class SystemManager {
             if (km > contract.getMileage()) {
                 mysqlConnection.updateContract(km, contract.getContractId());
             } else UI.printText("\n The entered mileage is less then the current mileage", ConsoleColor.RED);
+        }
         }
     }
 
