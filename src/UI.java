@@ -124,21 +124,21 @@ public class UI {
     }
 
     public static void printContract(Contract contract){
-        printText("\nDetails of contract nr: ", ConsoleColor.WHITE);
+        printText("\n Details of contract nr: ", ConsoleColor.WHITE);
         printText(String.valueOf(contract.getContractId()), ConsoleColor.CYAN);
-        printText("\nRenter Name: " , ConsoleColor.WHITE);
+        printText("\n Renter Name: " , ConsoleColor.WHITE);
         printText(contract.getRenterName(), ConsoleColor.CYAN);
-        printText("\nRenter Address: ", ConsoleColor.WHITE);
+        printText("\n Renter Address: ", ConsoleColor.WHITE);
         printText(contract.getAddress() + ", " + contract.getCity(), ConsoleColor.CYAN);
-        printText("\nRenter license : ", ConsoleColor.WHITE);
+        printText("\n Renter license : ", ConsoleColor.WHITE);
         printText(String.valueOf(contract.getLicenseID()), ConsoleColor.CYAN);
-        printText("\nCar license plate: ", ConsoleColor.WHITE);
+        printText("\n Car license plate: ", ConsoleColor.WHITE);
         printText(contract.getNumberPlate(), ConsoleColor.CYAN);
-        printText("\nContract period: ", ConsoleColor.WHITE);
+        printText("\n Contract period: ", ConsoleColor.WHITE);
         printText( contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.CYAN);
-        printText("\nThe mileage at contract commencement : ",ConsoleColor.WHITE);
+        printText("\n The mileage at contract commencement : ",ConsoleColor.WHITE);
         printText(contract.getMileage() + "km", ConsoleColor.CYAN);
-        printText("\nMaximum kilometers allowed: ",ConsoleColor.WHITE);
+        printText("\n Maximum kilometers allowed: ",ConsoleColor.WHITE);
         printText(contract.getMaxKm() + "km", ConsoleColor.CYAN);
     }
 
@@ -153,7 +153,8 @@ public class UI {
     public static void printListOfCars(ArrayList<Car> cars) {
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
-            printText("\n" + (i + 1) + ") " + car.getBrand(), ConsoleColor.CYAN);
+            printText("\n " + (i + 1) + ") ", ConsoleColor.WHITE);
+            printText(car.getBrand(), ConsoleColor.CYAN);
         }
         printText("\n", ConsoleColor.WHITE);
     }
@@ -161,43 +162,63 @@ public class UI {
     public static void printListOfRenters(ArrayList<Renter> renters) {
         for (int i = 0; i < renters.size(); i++) {
             Renter renter = renters.get(i);
-            printText("\n" + (i + 1) + ") " + renter.getFullName(), ConsoleColor.CYAN);
+            printText("\n " + (i + 1) + ") ", ConsoleColor.WHITE);
+            printText(renter.getFullName(), ConsoleColor.CYAN);
         }
         printText("\n", ConsoleColor.WHITE);
     }
     public static void printListOfContracts(ArrayList<Contract> contracts) {
         for (int i = 0; i < contracts.size(); i++) {
             Contract contract = contracts.get(i);
-            printText("\n ContractID: " + contract.getContractId() +" Car: " + contract.getNumberPlate() + " Renter-name: " + contract.getRenterName(), ConsoleColor.CYAN);
+            printText("\n ContractID: ", ConsoleColor.WHITE);
+            printText(Integer.toString(contract.getContractId()), ConsoleColor.CYAN);
+            printText(" Car: ", ConsoleColor.WHITE);
+            printText(contract.getNumberPlate(), ConsoleColor.CYAN);
+            printText(" Renter-name: ", ConsoleColor.WHITE);
+            printText(contract.getRenterName(), ConsoleColor.CYAN);
         }
         printText("\n", ConsoleColor.WHITE);
     }
 
     public static void printRenterDetails(Renter renter){
         if (renter != null) {
-            printText(" Details of renterID: " + renter.getLicenseId(), ConsoleColor.CYAN);
-            printText("\n FullName: " + renter.getFullName(), ConsoleColor.CYAN);
-            printText("\n Address: " + renter.getAddress() + ", " + renter.getCity() + ", "+ renter.getState(), ConsoleColor.CYAN);
-            printText("\n Zipcode: " + renter.getZipCode(), ConsoleColor.CYAN);
-            printText("\n Phone: "+ renter.getPhone(), ConsoleColor.CYAN);
-            printText("\n CellPhone: "+ renter.getCellPhone(), ConsoleColor.CYAN);
-            printText("\n Email: " + renter.getEmail(), ConsoleColor.CYAN);
-            printText("\n LicenseDate: " + renter.getLicenseDate(), ConsoleColor.CYAN);
+            printText(" Details of renterID: ", ConsoleColor.WHITE);
+            printText(Integer.toString(renter.getLicenseId()), ConsoleColor.CYAN);
+            printText("\n FullName: ", ConsoleColor.WHITE);
+            printText(renter.getFullName(), ConsoleColor.CYAN);
+            printText("\n Address: ", ConsoleColor.WHITE);
+            printText(renter.getAddress() + ", " + renter.getCity() + ", "+ renter.getState(), ConsoleColor.CYAN);
+            printText("\n Zipcode: ", ConsoleColor.WHITE);
+            printText(Integer.toString(renter.getZipCode()), ConsoleColor.CYAN);
+            printText("\n Phone: ", ConsoleColor.WHITE);
+            printText(Integer.toString(renter.getPhone()), ConsoleColor.CYAN);
+            printText("\n CellPhone: ", ConsoleColor.WHITE);
+            printText(Integer.toString(renter.getCellPhone()), ConsoleColor.CYAN);
+            printText("\n Email: ", ConsoleColor.WHITE);
+            printText(renter.getEmail(), ConsoleColor.CYAN);
+            printText("\n LicenseDate: ", ConsoleColor.WHITE);
+            printText(renter.getLicenseDate() + "", ConsoleColor.CYAN);
         } else {
-            printText("This renter is not in the system!", ConsoleColor.RED);
+            printText(" This renter is not in the system!", ConsoleColor.RED);
         }
     }
 
     public static void printCarDetails(Car car) {
         if (car != null) {
-            printText("Details of car: " + car.getNumberplate(), ConsoleColor.CYAN);
-            printText("\nBrand: " + car.getBrand(), ConsoleColor.CYAN);
-            printText("\nCategory: " + car.getCategory().toString(), ConsoleColor.CYAN);
-            printText("\nFuel type: " + (car.getFuelType().toString()), ConsoleColor.CYAN);
-            printText("\nMileage: "+ Double.toString(car.getMileage()), ConsoleColor.CYAN);
-            printText("\nRegistration date: " + (car.getRegistrationDate().toString()), ConsoleColor.CYAN);
+            printText(" Details of car: ", ConsoleColor.WHITE);
+            printText(car.getNumberplate(), ConsoleColor.CYAN);
+            printText("\n Brand: ", ConsoleColor.WHITE);
+            printText(car.getBrand(), ConsoleColor.CYAN);
+            printText("\n Category: ", ConsoleColor.WHITE);
+            printText(car.getCategory().toString(), ConsoleColor.CYAN);
+            printText("\n Fuel type: " + (car.getFuelType().toString()), ConsoleColor.WHITE);
+            printText((car.getFuelType().toString()), ConsoleColor.CYAN);
+            printText("\n Mileage: ", ConsoleColor.WHITE);
+            printText(Double.toString(car.getMileage()), ConsoleColor.CYAN);
+            printText("\n Registration date: ", ConsoleColor.WHITE);
+            printText((car.getRegistrationDate().toString()), ConsoleColor.CYAN);
         } else {
-            printText("This car is not in the system!", ConsoleColor.RED);
+            printText(" This car is not in the system!", ConsoleColor.RED);
         }
     }
     public static LocalDate getStartDate() {
@@ -220,39 +241,39 @@ public class UI {
 
         do {
             try {
-                System.out.print("\n Please give the day in format 'DD': ");
+                printText("\n Please give the day in format 'DD': ", ConsoleColor.WHITE);
                 int inputDay = in.nextInt();
                 in.nextLine(); // Consume the newline character left in the buffer
 
                 if (inputDay < 1 || inputDay > 31) {
-                    System.out.println(" Invalid day. Please ensure the day is between 1 and 31.");
+                    printText(" Invalid day. Please ensure the day is between 1 and 31.", ConsoleColor.RED);
                     continue; // Invalid day, loop again
                 }
                 day = inputDay;
 
-                System.out.print(" Please give the month in format 'MM': ");
+                printText(" Please give the month in format 'MM': ", ConsoleColor.WHITE);
                 int inputMonth = in.nextInt();
                 in.nextLine(); // Consume the newline character left in the buffer
 
                 if (inputMonth < 1 || inputMonth > 12) {
-                    System.out.println(" Invalid month. Please ensure the month is between 1 and 12.");
+                    printText(" Invalid month. Please ensure the month is between 1 and 12.", ConsoleColor.RED);
                     continue; // Invalid month, loop again
                 }
                 month = inputMonth;
 
-                System.out.print(" Please give the year in format 'YYYY': ");
+                printText(" Please give the year in format 'YYYY': ", ConsoleColor.WHITE);
                 int inputYear = in.nextInt();
                 in.nextLine(); // Consume the newline character left in the buffer
 
                 // should have someway to ensure we can't make a contract back in time
                 if (inputYear < 1950 || inputYear > 2030) {
-                    System.out.println(" Invalid year. Please ensure the year is between 1950 and 2030.");
+                    printText(" Invalid year. Please ensure the year is between 1950 and 2030.", ConsoleColor.RED);
                     continue; // Invalid year, loop again
                 }
                 year = inputYear;
 
             } catch (InputMismatchException e) {
-                System.out.println(" Invalid input. Please enter numeric values for the date.");
+                printText(" Invalid input. Please enter numeric values for the date.", ConsoleColor.RED);
                 in.nextLine(); // Clear the input buffer
             }
         } while (year == 0); // runs until a valid date is entered
@@ -263,7 +284,8 @@ public class UI {
         int count = 0;
         for (Category c : Category.values()){
             count += 1;
-            printText("\n " + count + ") "+c, ConsoleColor.CYAN);
+            printText("\n " + count + ")", ConsoleColor.WHITE);
+            printText(" " + c, ConsoleColor.CYAN);
         }
         printText("\n", ConsoleColor.WHITE);
     }
@@ -279,7 +301,7 @@ public class UI {
         if (email.contains("@")) {
             return  true;
         } else {
-            System.out.println(" invalid email");
+            printText(" invalid email", ConsoleColor.RED);
             return false;
         }
     }

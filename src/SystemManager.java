@@ -82,6 +82,8 @@ public class SystemManager {
     public void updateContract() {
         Contract contract = getContract();
         UI.printText("\n UPDATING CONTRACT", ConsoleColor.WHITE);
+        UI.printText("\n\n The current mileage is: ", ConsoleColor.WHITE);
+        UI.printText(Double.toString(contract.getMileage()), ConsoleColor.CYAN);
         if (contract != null) {
             UI.printText("\n Please enter the new mileage in km: ", ConsoleColor.WHITE);
             double km = UI.getDoubleInput();
@@ -91,15 +93,9 @@ public class SystemManager {
         }
     }
 
-    // never print using toString, this is just for test
-    private void printCars(ArrayList<Car> cars) {
-        for (Car c : cars) {
-            System.out.println(c);
-        }
-    }
-
     public Category chooseCategory() {
         Category category = null;
+        UI.printText("\n Please choose a category: ", ConsoleColor.WHITE);
         int choice = UI.getIntInput();
         switch (choice) {
             case 1 -> category = Category.Luxury;
@@ -116,7 +112,7 @@ public class SystemManager {
         LocalDate newStartDate = UI.getStartDate();
         LocalDate newEndDate = UI.getEndDate();
         ArrayList<Car> listOfAvailableCars = getListOfAvailableCars(newStartDate, newEndDate);
-        UI.printText("\n Please choose a category: ", ConsoleColor.WHITE);
+        UI.printText("\n The following categories are available: ", ConsoleColor.WHITE);
         UI.printCategories();
         Category category = chooseCategory();
         UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
@@ -189,10 +185,11 @@ public class SystemManager {
 
     public Car chooseCar(ArrayList<Car> cars){
         Car car = null;
-        while(car == null){
-        UI.printListOfCars(cars);
-        int choice = UI.getIntInput();
-        car =  getCarByIndex(cars, choice);}
+        while(car == null) {
+            UI.printListOfCars(cars);
+            UI.printText("\n Please provide the carID of the car you wish to access: ", ConsoleColor.WHITE);
+            int choice = UI.getIntInput();
+            car =  getCarByIndex(cars, choice);}
         return car;
     }
 
@@ -208,6 +205,7 @@ public class SystemManager {
         Renter renter = null;
         while(renter == null){
             UI.printListOfRenters(renters);
+            UI.printText("\n Please provide the renterID of the renter you wish to access: ", ConsoleColor.WHITE);
             int choice = UI.getIntInput();
             renter =  getRenterByIndex(renters, choice);}
         return renter;
