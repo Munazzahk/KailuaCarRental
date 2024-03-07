@@ -32,12 +32,12 @@ public class MSQLConnection {
             boolean passwordMatches = checkPassword(conn, username, password);
 
             if (passwordMatches) {
-                UI.printWelcome(username);
                     if (connection != null)
                     return;
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     connection = DriverManager.getConnection(DB_URL_rental, username, password);
+                    UI.printWelcome(username);
                 } catch (Exception e){
                     System.out.println(e.getMessage());
                 }
@@ -289,12 +289,9 @@ public class MSQLConnection {
             statement.setNull(6, Types.DECIMAL);
             statement.executeUpdate();
 
-            if (statement.executeUpdate() > 0) {
-                System.out.println("Contract created.");
-            } else {
-                System.out.println("Contract not created.");
-            }
+            UI.printText("\n CONTRACT CREATED", ConsoleColor.GREEN);
         } catch (Exception e) {
+            UI.printText("\n Something went wrong, try again", ConsoleColor.RED);
         }
     }
     public ArrayList<Car> getCarsByTimePeriod(LocalDate startDate, LocalDate endDate) {

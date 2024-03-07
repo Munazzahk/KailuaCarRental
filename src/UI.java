@@ -211,7 +211,7 @@ public class UI {
             printText(car.getBrand(), ConsoleColor.CYAN);
             printText("\n Category: ", ConsoleColor.WHITE);
             printText(car.getCategory().toString(), ConsoleColor.CYAN);
-            printText("\n Fuel type: " + (car.getFuelType().toString()), ConsoleColor.WHITE);
+            printText("\n Fuel type: " , ConsoleColor.WHITE);
             printText((car.getFuelType().toString()), ConsoleColor.CYAN);
             printText("\n Mileage: ", ConsoleColor.WHITE);
             printText(Double.toString(car.getMileage()), ConsoleColor.CYAN);

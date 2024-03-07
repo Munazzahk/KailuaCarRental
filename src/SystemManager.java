@@ -112,17 +112,22 @@ public class SystemManager {
         LocalDate newStartDate = UI.getStartDate();
         LocalDate newEndDate = UI.getEndDate();
         ArrayList<Car> listOfAvailableCars = getListOfAvailableCars(newStartDate, newEndDate);
-        UI.printText("\n The following categories are available: ", ConsoleColor.WHITE);
-        UI.printCategories();
-        Category category = chooseCategory();
-        UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
-        listOfAvailableCars = sortCarByCategory(listOfAvailableCars, category);
-        Car car = chooseCar(listOfAvailableCars);
-        Renter renter = getARenter();
-        UI.printText("\n Please provide the maximum mileage (km): ", ConsoleColor.WHITE);
-        int max_km = UI.getIntInput();
-        mysqlConnection.createContract(renter,car, java.sql.Date.valueOf(newStartDate),java.sql.Date.valueOf(newEndDate),max_km);
-
+            UI.printText("\n The following categories are available: ", ConsoleColor.WHITE);
+            UI.printCategories();
+            Category category = chooseCategory();
+            listOfAvailableCars = sortCarByCategory(listOfAvailableCars, category);
+            if (listOfAvailableCars.size() != 0) {
+                UI.printText("\n The following cars are available: ", ConsoleColor.WHITE);
+            Car car = chooseCar(listOfAvailableCars);
+            Renter renter = getARenter();
+            if(renter!=null) {
+                UI.printText("\n Please provide the maximum mileage (km): ", ConsoleColor.WHITE);
+                int max_km = UI.getIntInput();
+                mysqlConnection.createContract(renter, car, java.sql.Date.valueOf(newStartDate), java.sql.Date.valueOf(newEndDate), max_km);
+            }
+        } else {
+            UI.printText("\n There are no available cars", ConsoleColor.RED);
+        }
     }
 
     public Renter getARenter(){
@@ -132,9 +137,15 @@ public class SystemManager {
             return createRenter();
         }
         else {
-            UI.printText("\n Please choose an existing renter: ", ConsoleColor.WHITE);
             ArrayList<Renter> renters = mysqlConnection.getAllRenters();
-            return chooseRenter(renters);
+            if(renters.size()!= 0) {
+                UI.printText("\n Please choose an existing renter: ", ConsoleColor.WHITE);
+                return chooseRenter(renters);
+            }
+            else {
+                UI.printText("\n There are no existing renters", ConsoleColor.RED);
+                return null;
+            }
         }
     }
 
@@ -194,6 +205,7 @@ public class SystemManager {
     }
 
     public Car getCarByIndex(ArrayList<Car> cars, int index) {
+
         if (index >= 1 && index <= cars.size()) {
             return cars.get(index - 1);
         } else {
