@@ -1,3 +1,6 @@
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -12,7 +15,7 @@ public class UI {
     }
 
     // Getting inout methods
-    public String getStringInput() {
+    public static String getStringInput() {
         String stringInput = in.nextLine();
 
         while (!isString(stringInput)) {
@@ -89,7 +92,7 @@ public class UI {
         } else {return false;}
     }
 
-    private boolean isString(String str) {
+    private static boolean isString(String str) {
         Pattern pattern = Pattern.compile("^[a-zA-ZåäöøæÅÄÖØÆéèêëÉÈÊËíìîïÍÌÎÏóòôõöÓÒÔÕÖúùûüÚÙÛÜÁáÀàÂâÃãÄäÇçÐðÉéÊêËëÍíÎîÏïÑñÓóÔôÕõÖöÚúÛûÜüÝýÿ\\s\\-',.]+$"); // regex - complicated - Pattern for letters and a few special characters
 
         //check if StringInput matches our letter pattern
@@ -145,5 +148,42 @@ public class UI {
         }
     }
 
+    public static Date getDate(){
+        String licenseDateString;
+        Date licenseDate;
+        do {
+            UI.printText(" License date (YYYY-MM-DD): ", ConsoleColor.WHITE);
+            licenseDateString = getStringWithNumbersInput();
+            licenseDate = convertToSqlDate(licenseDateString);
+        } while (licenseDate == null);
+        return licenseDate;
+    }
 
+    public static String getEmail(){
+        String email = null;
+        do {
+            UI.printText(" Email: ", ConsoleColor.WHITE);
+            email = getStringWithNumbersInput();
+        } while (!checkValidEmail(email));
+        return email;
+    }
+    private static boolean checkValidEmail(String email){
+        if (email.contains("@")) {
+            return  true;
+        } else {
+            System.out.println(" invalid email");
+            return false;
+        }
+    }
+
+    public static Date convertToSqlDate(String dateString) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(dateString);
+            return new Date(utilDate.getTime());
+        } catch (ParseException e) {
+            UI.printText("Wrong input format \n", ConsoleColor.RED);
+            return null;
+        }
+    }
 }
