@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -27,7 +28,7 @@ public class UI {
     }
 
     public static int getIntInput() {
-        int intInput = Integer.MIN_VALUE;
+        int intInput = Integer.MIN_VALUE; //change, not a good way to do it
         while (intInput == Integer.MIN_VALUE){
             try {
                 intInput = in.nextInt();
@@ -40,6 +41,21 @@ public class UI {
         }
         return intInput;
     }
+    public static double getDoubleInput() {
+        double doubleInput = Integer.MIN_VALUE; //change, not a good way to do it
+        while (doubleInput == Integer.MIN_VALUE){
+            try {
+                doubleInput = in.nextDouble();
+                in.nextLine(); //Scanner bug
+            }
+            catch (InputMismatchException e){
+                printText(" Input not recognized, please enter a number: ", ConsoleColor.RED);
+                in.next();
+            }
+        }
+        return doubleInput;
+    }
+
 
     public boolean getBooleanInput() {
         String booleanInput = in.nextLine();
@@ -81,5 +97,53 @@ public class UI {
 
         return matcher.find(); // Boolean true if there are only letters in stringInput
     }
+
+    public static void printContract(Contract contract){
+        printText("\nDetails of contract nr: ", ConsoleColor.WHITE);
+        printText(String.valueOf(contract.getContractId()), ConsoleColor.CYAN);
+        printText("\nRenter Name: " , ConsoleColor.WHITE);
+        printText(contract.getRenterName(), ConsoleColor.CYAN);
+        printText("\nRenter Address: ", ConsoleColor.WHITE);
+        printText(contract.getAddress() + ", " + contract.getCity(), ConsoleColor.CYAN);
+        printText("\nRenter license : ", ConsoleColor.WHITE);
+        printText(String.valueOf(contract.getLicenseID()), ConsoleColor.CYAN);
+        printText("\nCar license plate: ", ConsoleColor.WHITE);
+        printText(contract.getNumberPlate(), ConsoleColor.CYAN);
+        printText("\nContract period: ", ConsoleColor.WHITE);
+        printText( contract.getStartDate()  + " - " + contract.getEndDate(), ConsoleColor.CYAN);
+        printText("\nThe mileage at contract commencement : ",ConsoleColor.WHITE);
+        printText(contract.getMileage() + "km", ConsoleColor.CYAN);
+        printText("\nMaximum kilometers allowed: ",ConsoleColor.WHITE);
+        printText(contract.getMaxKm() + "km", ConsoleColor.CYAN);
+    }
+
+    public static void printWelcome(String username){
+        String[] parts = username.split("(?<=\\D)(?=\\d)");
+        UI.printText("\n WELCOME " + parts[0].toUpperCase(), ConsoleColor.GREEN);
+
+
+    }
+
+
+    public void printListOfCars(ArrayList<Car> cars) {
+        System.out.println("The system currently has these cars: ");
+        for (Car car : cars) {
+            printText(" - " + car.getNumberplate(), ConsoleColor.CYAN);
+        }
+    }
+
+    public void printCarDetails(Car car) {
+        if (car != null) {
+            printText("Details of car: " + car.getNumberplate(), ConsoleColor.CYAN);
+            printText("\nBrand: " + car.getBrand(), ConsoleColor.CYAN);
+            printText("\nCategory: " + car.getCategory().toString(), ConsoleColor.CYAN);
+            printText("\nFuel type: " + (car.getFuelType().toString()), ConsoleColor.CYAN);
+            printText("\nMileage: "+ Double.toString(car.getMileage()), ConsoleColor.CYAN);
+            printText("\nRegistration date: " + (car.getRegistrationDate().toString()), ConsoleColor.CYAN);
+        } else {
+            printText("This car is not in the system!", ConsoleColor.RED);
+        }
+    }
+
 
 }

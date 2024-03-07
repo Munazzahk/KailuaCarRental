@@ -8,11 +8,6 @@ import java.util.Scanner;
 
 public class MSQLConnection {
 
-/*    private String database = "jdbc:mysql : //localhost:3306/kailua_rental"; */
-/*    private String username;*/
-/*    private String password; //change so that it fits your own */
-/*    private Connection connection = null;*/
-
     private static final String DB_URL_rental = "jdbc:mysql://localhost:3306/kailua_rental";
     private static final String DB_URL_employees = "jdbc:mysql://localhost:3306/kailua_employees";
     private static final String ADMIN_USERNAME = "kailua";
@@ -21,53 +16,13 @@ public class MSQLConnection {
     private Connection connection = null;
 
     public  MSQLConnection() {
-/*        this.username = username;
-        this.password = password;*/
         createConnection();
     }
 
-
-/*    private void createConnection() {
-        System.out.println("Connecting to database: " + DB_URL_rental);
-*//*        if (connection != null)
-            return;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(database, username, password);
-        } catch (Exception e) {
-            System.out.println("Exception here: " + e.getMessage());
-        }*//*
-
-        // Connect to the first database containing usernames and passwords
-        try (Connection conn1 = DriverManager.getConnection(DB_URL_rental, ADMIN_USERNAME, ADMIN_PASSWORD)) {
-            // Check the password for the given username in the first database
-            ArrayList data = logon();
-            String username = data.get(0).toString();
-            String password = data.get(1).toString();
-            boolean passwordMatches = checkPassword(conn1, username, password);
-            if (passwordMatches) {
-                System.out.println("Password matches for user: " + username);
-
-            } else {
-                System.out.println("Password does not match for user: " + username);
-            }
-        } catch (SQLException e) {
-            System.out.println("IM HERE IN CONN1");
-            e.printStackTrace();
-        }
-
-        // Connect to the second database containing only usernames
-        try (Connection conn2 = DriverManager.getConnection(DB_URL_rental, ADMIN_USERNAME, ADMIN_PASSWORD)) {
-            // Perform operations on the second database as needed
-            // For example, you can retrieve usernames from the 'employees' table in database2
-        } catch (SQLException e) {
-            System.out.println("IM HERE IN CONN2");
-            e.printStackTrace();
-        }
-    }*/
-
-
-    private void createConnection() {
+    public Connection getConnection() {
+        return connection;
+    }
+    public void createConnection() {
         try (Connection conn = DriverManager.getConnection(DB_URL_employees, ADMIN_USERNAME, ADMIN_PASSWORD)) {
             ArrayList<String> loginInfo = logon();
             String username = loginInfo.get(0);
@@ -77,8 +32,8 @@ public class MSQLConnection {
             boolean passwordMatches = checkPassword(conn, username, password);
 
             if (passwordMatches) {
-                System.out.println("Password matches for user: " + username);
-                if (connection != null)
+                UI.printWelcome(username);
+                    if (connection != null)
                     return;
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -87,8 +42,6 @@ public class MSQLConnection {
                     System.out.println(e.getMessage());
                 }
 
-            } else {
-                System.out.println("Password does not match for user: " + username);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,9 +52,9 @@ public class MSQLConnection {
        public ArrayList logon(){
         String employeeUsername, employeePassword;
         Scanner in = new Scanner(System.in);
-        System.out.print("Please enter your username: ");
+        System.out.print("\n Please enter your username: ");
         employeeUsername = in.nextLine();
-        System.out.print("\nPlease enter your password: ");
+        System.out.print("\n Please enter your password: ");
         employeePassword = in.nextLine();
 
         ArrayList usernameAndPassword = new ArrayList();
@@ -112,7 +65,7 @@ public class MSQLConnection {
 
 
     private static boolean checkPassword(Connection connection, String username, String password) throws SQLException {
-        String sql = "SELECT employee_username FROM employees WHERE employee_username = ? ";
+        String sql = "SELECT employee_username FROM employees WHERE BINARY employee_username = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -131,7 +84,7 @@ public class MSQLConnection {
     }*/
 
 
-   public Contract getContract(int contractID) {
+    public Contract getContract(int contractID) {
         Contract contract = null;
         try {
             String query =
@@ -165,35 +118,31 @@ public class MSQLConnection {
         return contract;
     }
 
-    public void updateContract(int contractID, int km) {
-        Contract contract = getContract(contractID);
-        if (km > contract.getMileage())
-            try {
-                String query = "UPDATE contract SET contract_mileage = ? WHERE contract_id = ?";
-                PreparedStatement stm = connection.prepareStatement(query);
-                stm.setInt(1, km);
-                stm.setInt(2, contractID);
-                stm.executeUpdate();
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-    } else System.out.println("The entered mileage is less then the current mileage");
-
+    public void updateContract(double km, int contractID) {
+        try {
+            String query = "UPDATE contract SET contract_mileage = ? WHERE contract_id = ?";
+            PreparedStatement stm = connection.prepareStatement(query);
+            stm.setDouble(1, km);
+            stm.setInt(2, contractID);
+            stm.executeUpdate();
+            UI.printText("\n Contract updated", ConsoleColor.GREEN);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // this is just to test. delete and replace with proper method
     // Some things are enums in MYSQL, just used strings rn, we need to make enums in JAVA
-  /*  public ArrayList<Car> getAllCars() {
+    public ArrayList<Car> getAllCars() {
         ArrayList<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM car;";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 String plateNumber = rs.getString("plate_number");
-                String category = rs.getString("category");
+                Category category = Category.valueOf(rs.getString("category"));
                 String brand = rs.getString("brand");
-                String fuel = rs.getString("fuel");
+                FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
                 LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
                 int mileage = rs.getInt("mileage");
                 Car car = new Car(plateNumber,category,brand,fuel,registrationDate,mileage);
@@ -203,8 +152,49 @@ public class MSQLConnection {
             e.printStackTrace();
         }
         return cars;
-    }*/
+    }
 
+    // Used same method as the one up there - Check if it is ok
+    // Tested and it works fine
+    // Some things are enums in MYSQL, we need to make enums in JAV - it was Category and FuelType so they are Enums now
+    public Car getCar(String platenumber) {
+        String query = "SELECT * FROM car WHERE plate_number = ?";
+        Car car = null;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, platenumber); //Prevents SQL injection attacks
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { //To check if there is a car with provided plate number
+                    String plateNumber = rs.getString("plate_number");
+                    Category category = Category.valueOf(rs.getString("category"));
+                    String brand = rs.getString("brand");
+                    FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
+                    LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
+                    int mileage = rs.getInt("mileage");
+                    car = new Car(plateNumber, category, brand, fuel, registrationDate, mileage);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return car;
+    }
+
+    public Renter getRenter(String licenseId) {
+        String query = "SELECT * FROM car WHERE plate_number = ?";
+        Renter renter = null;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, licenseId); //Prevents SQL injection attacks
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) { //To check if there is a car with provided plate number
+                    String licnseId = rs.getString("license_id");
+                    renter = new Renter();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return renter;
+    }
 
 
 

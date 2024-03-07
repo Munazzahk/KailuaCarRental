@@ -1,10 +1,10 @@
 public class MenuBuilder {
-    //Står måske for at lave menuerne i stedet for at lave dem i UI?
 
     public Menu buildMainMenu() {
         Menu mainMenu = new Menu();
         mainMenu.setMenuTitle(" Which menu would you like to access?");
-        mainMenu.setMenuItems("");
+        mainMenu.setMenuItems(" 1) Create new contract", " 2) View a contract", " 3) Update contract mileage",
+                " 4) Delete a contract ", " q) Quit");
         mainMenu.printMenu();
         return mainMenu;
     }

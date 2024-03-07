@@ -25,17 +25,13 @@ public class Menu {
 
     // HANDLE MENU CHOICES
 
-    public int getMenuChoiceFromUserInput() {
+    public String getMenuChoiceFromUserInput() {
         UI.printText(" Please enter the desired menu-number: ",ConsoleColor.RESET);
-        return UI.getIntInput();
+        return UI.getStringWithNumbersInput();
     }
 
-    public int menuInputHandler() {
-        int choice = getMenuChoiceFromUserInput();
-        while (choice < 0 || getMenuItemsSize() < choice) {
-            UI.printText(" Not an option", ConsoleColor.RED);
-            choice = getMenuChoiceFromUserInput();
-        }
+    public String menuInputHandler() {
+        String choice = getMenuChoiceFromUserInput();
         return choice;
     }
 
@@ -46,7 +42,7 @@ public class Menu {
         System.out.println("\n");
         System.out.println(" "+"_".repeat(spaceLength) +  menuTitle + "_".repeat(spaceLength)+"\n");
         for (int i = 0; i < menuItems.size(); i++) {
-            String line = (i+1) +") " + menuItems.get(i);
+            String line =   menuItems.get(i);
             System.out.println("   "+line);
         }
         System.out.println(" ________________________________________________ ");
