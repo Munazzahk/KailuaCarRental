@@ -154,10 +154,7 @@ public class MSQLConnection {
         return cars;
     }
 
-    // Used same method as the one up there - Check if it is ok
-    // Tested and it works fine
-    // Some things are enums in MYSQL, we need to make enums in JAV - it was Category and FuelType so they are Enums now
-    public Car getCar(String platenumber) {
+     public Car getCar(String platenumber) {
         String query = "SELECT * FROM car WHERE plate_number = ?";
         Car car = null;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -179,36 +176,112 @@ public class MSQLConnection {
         return car;
     }
 
-    public Renter getRenter(String licenseId) {
-        String query = "SELECT * FROM car WHERE plate_number = ?";
+    public Renter getRenter(int licenseId) {
         Renter renter = null;
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, licenseId); //Prevents SQL injection attacks
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) { //To check if there is a car with provided plate number
-                    String licnseId = rs.getString("license_id");
-                    renter = new Renter();
-                }
-            }
+        try{
+        String query = "SELECT * FROM renter WHERE license_id = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setInt(1, licenseId); //Prevents SQL injection attacks
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) { //To check if there is a renter with provided plate number
+            String fullName = rs.getString("fullname");
+            String address = rs.getString("address");
+            int zipCode = rs.getInt("zip_code");
+            String city = rs.getString("city");
+            String state = rs.getString("state");
+            int phone = rs.getInt("phone");
+            int cellPhone = rs.getInt("cellphone");
+            String email = rs.getString("email");
+            Date licenseDate = rs.getDate("license_date");
+            renter = new Renter(fullName,address,zipCode,city,state,
+                    phone,cellPhone,email,licenseId,(java.sql.Date)licenseDate);
+
+        }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return renter;
     }
 
-    public void createContract(Contract contract) {
-        try {
-            String query = "INSERT INTO contract (contract_id, plate_number, license_id, start_date, end_date, max_km, contract_mileage)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, contract.getContractId());
-            statement.setString(2, contract.getNumberPlate());
-            statement.setInt(2, contract.getLicenseID());
-            statement.setDate(2, contract.getStartDate());
-            statement.setDate(2, contract.getEndDate());
-            statement.setInt(2, contract.getMaxKm());
-            statement.setDouble(2, contract.getMileage());
 
+    public   ArrayList<Renter>  getAllRenters() {
+        ArrayList<Renter> renters = new ArrayList<>();
+            try  {
+                String query = "SELECT * FROM renter;";
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String fullName = rs.getString("fullname");
+                    String address = rs.getString("address");
+                    int zipCode = rs.getInt("zip_code");
+                    String city = rs.getString("city");
+                    String state = rs.getString("state");
+                    int phone = rs.getInt("phone");
+                    int cellPhone = rs.getInt("cellphone");
+                    String email = rs.getString("email");
+                    int licenseId = rs.getInt("license_id");
+                    Date licenseDate = rs.getDate("license_date");
+                    Renter renter = new Renter(fullName,address,zipCode,city,state,
+                            phone,cellPhone,email,licenseId,(java.sql.Date)licenseDate);
+                    renters.add(renter);
+                }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return renters;
+    }
+    public   ArrayList<Contract>  getAllContracts() {
+        ArrayList<Contract> contracts = new ArrayList<>();
+        try  {
+            String query = "SELECT * FROM contract;";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int contractID = rs.getInt("contract_id");
+                String renterName = rs.getString("fullname");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                int licenseId = rs.getInt("license_id");
+                Date startDate = rs.getDate("start_date");
+                Date endDate = rs.getDate("end_date");
+                int maxKm = rs.getInt("max_km");
+                double mileage = rs.getDouble("mileage");
+                String numberPlate = rs.getString("plate_number");
+                Contract contract = new Contract( contractID,licenseId, renterName,
+                        address, city,  (java.sql.Date)startDate,
+                        (java.sql.Date) endDate,  maxKm,  mileage,  numberPlate);
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+
+    public void deleteContract(int contractID){
+        try{
+            String query = " DELETE FROM contract WHERE contract_id = ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1,contractID);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void createContract(Renter renter, Car car, Date startDate, Date endDate, int maxKm) {
+        try {
+            String query = "INSERT INTO contract (plate_number, license_id, start_date, end_date, max_km, contract_mileage)" +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, car.getNumberplate());
+            statement.setInt(2, renter.getLicenseId());
+            statement.setDate(3, (java.sql.Date) startDate);
+            statement.setDate(4, (java.sql.Date) endDate);
+            statement.setInt(5, maxKm);
+            statement.setNull(6, Types.DECIMAL);
             statement.executeUpdate();
+
             if (statement.executeUpdate() > 0) {
                 System.out.println("Contract created.");
             } else {
@@ -216,6 +289,70 @@ public class MSQLConnection {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+    public ArrayList<Car> getCarsByTimePeriod(LocalDate startDate, LocalDate endDate) {
+        ArrayList<Car> availableCars = new ArrayList<>();
+
+        String query = "SELECT DISTINCT car.* " +
+                "FROM car " +
+                "LEFT JOIN contract ON car.plate_number = contract.plate_number " +
+                "WHERE " +
+                "( " +
+                "    car.plate_number NOT IN ( " +
+                "        SELECT c2.plate_number " +
+                "        FROM contract c2 " +
+                "        WHERE ( " +
+                "            c2.start_date <= ? " +
+                "            AND " +
+                "            c2.end_date >= ? " +
+                "        ) " +
+                "    ) " +
+                ")";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDate(1, java.sql.Date.valueOf(endDate));
+            stmt.setDate(2, java.sql.Date.valueOf(startDate));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String plateNumber = rs.getString("plate_number");
+                    Category category = Category.valueOf(rs.getString("category"));
+                    String brand = rs.getString("brand");
+                    FuelType fuel = FuelType.valueOf(rs.getString("fuel"));
+                    LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
+                    int mileage = rs.getInt("mileage");
+                    Car car = new Car(plateNumber,category,brand,fuel,registrationDate,mileage);
+                    availableCars.add(car);
+                }
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        return availableCars;
+    }
+    public void createRenter(Renter renter) {
+
+        try  {
+            String sql = "INSERT INTO renter (license_id, fullname, address, zip_code, city, state, cellphone, phone, email, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, renter.getLicenseId());
+            statement.setString(2, renter.getFullName());
+            statement.setString(3, renter.getAddress());
+            statement.setInt(4, renter.getZipCode());
+            statement.setString(5, renter.getCity());
+            statement.setString(6, renter.getState());
+            statement.setInt(7, renter.getCellPhone());
+            statement.setInt(8, renter.getPhone());
+            statement.setString(9, renter.getEmail());
+            statement.setDate(10, (java.sql.Date) renter.getLicenseDate());
+
+            int rowInserted = statement.executeUpdate();
+            if (rowInserted > 0) {
+                System.out.println("Renter created successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
