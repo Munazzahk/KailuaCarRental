@@ -154,7 +154,8 @@ public class MSQLConnection {
     }
 
 
-     public Car getCar(String platenumber) {
+
+    public Car getCar(String platenumber) {
         String query = "SELECT * FROM car WHERE plate_number = ?";
         Car car = null;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -176,33 +177,58 @@ public class MSQLConnection {
         return car;
     }
 
+    public void createRenter(Renter renter) {
+
+        try  {
+            String sql = "INSERT INTO renter (license_id, fullname, address, zip_code, city, state, cellphone, phone, email, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, renter.getLicenseId());
+            statement.setString(2, renter.getFullName());
+            statement.setString(3, renter.getAddress());
+            statement.setInt(4, renter.getZipCode());
+            statement.setString(5, renter.getCity());
+            statement.setString(6, renter.getState());
+            statement.setInt(7, renter.getCellPhone());
+            statement.setInt(8, renter.getPhone());
+            statement.setString(9, renter.getEmail());
+            statement.setDate(10, (java.sql.Date) renter.getLicenseDate());
+
+            int rowInserted = statement.executeUpdate();
+            if (rowInserted > 0) {
+                System.out.println("Renter created successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     public Renter getRenter(int licenseId) {
         Renter renter = null;
         try{
-        String query = "SELECT * FROM renter WHERE license_id = ?";
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, licenseId); //Prevents SQL injection attacks
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) { //To check if there is a renter with provided plate number
-            String fullName = rs.getString("fullname");
-            String address = rs.getString("address");
-            int zipCode = rs.getInt("zip_code");
-            String city = rs.getString("city");
-            String state = rs.getString("state");
-            int phone = rs.getInt("phone");
-            int cellPhone = rs.getInt("cellphone");
-            String email = rs.getString("email");
-            Date licenseDate = rs.getDate("license_date");
-            renter = new Renter(fullName,address,zipCode,city,state,
-                    phone,cellPhone,email,licenseId,(java.sql.Date)licenseDate);
+            String query = "SELECT * FROM renter WHERE license_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, licenseId); //Prevents SQL injection attacks
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) { //To check if there is a renter with provided plate number
+                String fullName = rs.getString("fullname");
+                String address = rs.getString("address");
+                int zipCode = rs.getInt("zip_code");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
+                int phone = rs.getInt("phone");
+                int cellPhone = rs.getInt("cellphone");
+                String email = rs.getString("email");
+                Date licenseDate = rs.getDate("license_date");
+                renter = new Renter(fullName,address,zipCode,city,state,
+                        phone,cellPhone,email,licenseId,(java.sql.Date)licenseDate);
 
-        }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return renter;
     }
-
 
     public   ArrayList<Renter>  getAllRenters() {
         ArrayList<Renter> renters = new ArrayList<>();
@@ -333,29 +359,5 @@ public class MSQLConnection {
         }
         return availableCars;
     }
-    public void createRenter(Renter renter) {
 
-        try  {
-            String sql = "INSERT INTO renter (license_id, fullname, address, zip_code, city, state, cellphone, phone, email, license_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, renter.getLicenseId());
-            statement.setString(2, renter.getFullName());
-            statement.setString(3, renter.getAddress());
-            statement.setInt(4, renter.getZipCode());
-            statement.setString(5, renter.getCity());
-            statement.setString(6, renter.getState());
-            statement.setInt(7, renter.getCellPhone());
-            statement.setInt(8, renter.getPhone());
-            statement.setString(9, renter.getEmail());
-            statement.setDate(10, (java.sql.Date) renter.getLicenseDate());
-
-            int rowInserted = statement.executeUpdate();
-            if (rowInserted > 0) {
-                System.out.println("Renter created successfully!");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
 }
